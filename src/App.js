@@ -92,6 +92,10 @@ class App extends Component {
     this.addTag('I');
   };
 
+  strike = () => {
+    this.addTag('S');
+  };
+
   split = () => {
     const { text } = this.state;
 
@@ -129,6 +133,7 @@ class App extends Component {
         <div className='panel'>
           <button onClick={this.bold}>B</button>
           <button onClick={this.italic}>I</button>
+          <button onClick={this.strike}>S</button>
           <button onClick={this.split}>-@-</button>
           <button onClick={this.upperAll}>-AA-</button>
           <button onClick={this.lowerAll}>-aa-</button>
