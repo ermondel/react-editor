@@ -57,12 +57,22 @@ class App extends Component {
     this.addTag('I');
   };
 
+  split = () => {
+    const { text } = this.state;
+
+    if (text.indexOf('@') >= 0) {
+      this.editorHistory.push(text);
+      this.setState({ text: text.replaceAll(/ *@ */g, '\r\n@\r\n') });
+    }
+  };
+
   render() {
     return (
       <div className='app'>
         <div className='panel'>
           <button onClick={this.bold}>B</button>
           <button onClick={this.italic}>I</button>
+          <button onClick={this.split}>@</button>
           <button onClick={this.undo} disabled={!this.editorHistory.length}>
             undo
           </button>
