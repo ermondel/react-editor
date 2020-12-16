@@ -8,6 +8,7 @@ class App extends Component {
   };
 
   editorRef = React.createRef();
+  editorHistory = [];
 
   onEditorChange = (event) => {
     this.setState({ text: event.target.value });
@@ -26,6 +27,9 @@ class App extends Component {
 
     if (tagName && selectionStart !== selectionEnd) {
       const text = this.editorRef.current.value;
+
+      this.editorHistory.push(text);
+
       const selected = text.substring(selectionStart, selectionEnd);
       const val = `[${tagName}]${selected}[/${tagName}]`;
 
@@ -36,12 +40,21 @@ class App extends Component {
     }
   };
 
+  undo = () => {
+    const previousText = this.editorHistory.pop();
+
+    if (previousText) {
+      this.setState({ text: previousText });
+    }
+  };
+
   render() {
     return (
       <div className='app'>
         <div className='panel'>
           <button onClick={() => this.addTag('B')}>B</button>
           <button onClick={() => this.addTag('I')}>I</button>
+          <button onClick={this.undo}>undo</button>
         </div>
 
         <textarea
