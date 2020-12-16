@@ -16,15 +16,50 @@ class App extends Component {
 
     if (tagName && selectionStart !== selectionEnd) {
       const currentText = ref.value;
-
-      this.editorHistory.push(currentText);
-
       const selectedText = currentText.substring(selectionStart, selectionEnd);
       const insertText = `[${tagName}]${selectedText}[/${tagName}]`;
 
       ref.setRangeText(insertText, selectionStart, selectionEnd, 'end');
       ref.focus();
 
+      this.editorHistory.push(currentText);
+      this.setState({ text: ref.value });
+    }
+  }
+
+  changeCase(type) {
+    const { selectionStart, selectionEnd } = this.state;
+    const ref = this.editorRef.current;
+
+    if (type && selectionStart !== selectionEnd) {
+      const currentText = ref.value;
+      const selectedText = currentText.substring(selectionStart, selectionEnd);
+
+      let insertText;
+
+      switch (type) {
+        case 'upper':
+          insertText = selectedText.toUpperCase();
+          break;
+
+        case 'lower':
+          insertText = selectedText.toLowerCase();
+          break;
+
+        default:
+          insertText = selectedText;
+          break;
+      }
+
+      if (selectedText === insertText) {
+        // no difference
+        return;
+      }
+
+      ref.setRangeText(insertText, selectionStart, selectionEnd, 'end');
+      ref.focus();
+
+      this.editorHistory.push(currentText);
       this.setState({ text: ref.value });
     }
   }
@@ -66,13 +101,39 @@ class App extends Component {
     }
   };
 
+  upperAll = () => {
+    const { text } = this.state;
+
+    this.editorHistory.push(text);
+    this.setState({ text: text.toUpperCase() });
+  };
+
+  lowerAll = () => {
+    const { text } = this.state;
+
+    this.editorHistory.push(text);
+    this.setState({ text: text.toLowerCase() });
+  };
+
+  upper = () => {
+    this.changeCase('upper');
+  };
+
+  lower = () => {
+    this.changeCase('lower');
+  };
+
   render() {
     return (
       <div className='app'>
         <div className='panel'>
           <button onClick={this.bold}>B</button>
           <button onClick={this.italic}>I</button>
-          <button onClick={this.split}>@</button>
+          <button onClick={this.split}>-@-</button>
+          <button onClick={this.upperAll}>-AA-</button>
+          <button onClick={this.lowerAll}>-aa-</button>
+          <button onClick={this.upper}>AA</button>
+          <button onClick={this.lower}>aa</button>
           <button onClick={this.undo} disabled={!this.editorHistory.length}>
             undo
           </button>
