@@ -10,6 +10,25 @@ class App extends Component {
   editorRef = React.createRef();
   editorHistory = [];
 
+  addTag(tagName) {
+    const { selectionStart, selectionEnd } = this.state;
+    const ref = this.editorRef.current;
+
+    if (tagName && selectionStart !== selectionEnd) {
+      const currentText = ref.value;
+
+      this.editorHistory.push(currentText);
+
+      const selectedText = currentText.substring(selectionStart, selectionEnd);
+      const insertText = `[${tagName}]${selectedText}[/${tagName}]`;
+
+      ref.setRangeText(insertText, selectionStart, selectionEnd, 'end');
+      ref.focus();
+
+      this.setState({ text: ref.value });
+    }
+  }
+
   onEditorChange = (event) => {
     this.setState({ text: event.target.value });
   };
@@ -22,24 +41,6 @@ class App extends Component {
     }
   };
 
-  addTag = (tagName) => {
-    const { selectionStart, selectionEnd } = this.state;
-
-    if (tagName && selectionStart !== selectionEnd) {
-      const text = this.editorRef.current.value;
-
-      this.editorHistory.push(text);
-
-      const selected = text.substring(selectionStart, selectionEnd);
-      const val = `[${tagName}]${selected}[/${tagName}]`;
-
-      this.editorRef.current.setRangeText(val, selectionStart, selectionEnd, 'end');
-      this.editorRef.current.focus();
-
-      this.setState({ text: this.editorRef.current.value });
-    }
-  };
-
   undo = () => {
     const previousText = this.editorHistory.pop();
 
@@ -48,13 +49,23 @@ class App extends Component {
     }
   };
 
+  bold = () => {
+    this.addTag('B');
+  };
+
+  italic = () => {
+    this.addTag('I');
+  };
+
   render() {
     return (
       <div className='app'>
         <div className='panel'>
-          <button onClick={() => this.addTag('B')}>B</button>
-          <button onClick={() => this.addTag('I')}>I</button>
-          <button onClick={this.undo}>undo</button>
+          <button onClick={this.bold}>B</button>
+          <button onClick={this.italic}>I</button>
+          <button onClick={this.undo} disabled={!this.editorHistory.length}>
+            undo
+          </button>
         </div>
 
         <textarea
