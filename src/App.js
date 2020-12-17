@@ -48,6 +48,11 @@ class App extends Component {
     }
   }
 
+  addTagToCurrentPosition(type) {
+    const text = this.setTextToEditor(`[${type}][/${type}]`);
+    this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+  }
+
   uppercaseSelectedText() {
     const selectedText = this.getSelectedTextFromEditor();
     const result = selectedText.toUpperCase();
@@ -100,11 +105,10 @@ class App extends Component {
   };
 
   onTextSelect = (event) => {
-    const { selectionStart, selectionEnd } = event.target;
-
-    if (selectionStart !== selectionEnd) {
-      this.setState({ selectionStart, selectionEnd });
-    }
+    this.setState({
+      selectionStart: event.target.selectionStart,
+      selectionEnd: event.target.selectionEnd,
+    });
   };
 
   switchMode = () => {
@@ -122,24 +126,30 @@ class App extends Component {
   bold = () => {
     if (this.state.allText) {
       this.addTagToAllText('B');
-    } else {
+    } else if (this.state.selectionStart !== this.state.selectionEnd) {
       this.addTagToSelectedText('B');
+    } else {
+      this.addTagToCurrentPosition('B');
     }
   };
 
   italic = () => {
     if (this.state.allText) {
       this.addTagToAllText('I');
-    } else {
+    } else if (this.state.selectionStart !== this.state.selectionEnd) {
       this.addTagToSelectedText('I');
+    } else {
+      this.addTagToCurrentPosition('I');
     }
   };
 
   strike = () => {
     if (this.state.allText) {
       this.addTagToAllText('S');
-    } else {
+    } else if (this.state.selectionStart !== this.state.selectionEnd) {
       this.addTagToSelectedText('S');
+    } else {
+      this.addTagToCurrentPosition('S');
     }
   };
 
