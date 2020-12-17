@@ -5,6 +5,7 @@ class App extends Component {
     text: 'Lorem ipsum dolor sit amet.',
     selectionStart: 0,
     selectionEnd: 0,
+    allText: false,
   };
 
   editorRef = React.createRef();
@@ -38,12 +39,59 @@ class App extends Component {
     return editor.value;
   }
 
-  addTag(type) {
+  addTagToSelectedText(type) {
     const selectedText = this.getSelectedTextFromEditor();
 
     if (selectedText) {
       const text = this.setTextToEditor(`[${type}]${selectedText}[/${type}]`);
       this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
+  uppercaseSelectedText() {
+    const selectedText = this.getSelectedTextFromEditor();
+    const result = selectedText.toUpperCase();
+
+    if (result !== selectedText) {
+      const text = this.setTextToEditor(result);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
+  lowercaseSelectedText() {
+    const selectedText = this.getSelectedTextFromEditor();
+    const result = selectedText.toLowerCase();
+
+    if (result !== selectedText) {
+      const text = this.setTextToEditor(result);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
+  addTagToAllText(type) {
+    const { text } = this.state;
+
+    this.editorHistory.push(text);
+    this.setState({ text: `[${type}]${text}[/${type}]` });
+  }
+
+  uppercaseAllText() {
+    const { text } = this.state;
+    const result = text.toUpperCase();
+
+    if (result !== text) {
+      this.editorHistory.push(text);
+      this.setState({ text: result });
+    }
+  }
+
+  lowercaseAllText() {
+    const { text } = this.state;
+    const result = text.toLowerCase();
+
+    if (result !== text) {
+      this.editorHistory.push(text);
+      this.setState({ text: result });
     }
   }
 
@@ -59,6 +107,10 @@ class App extends Component {
     }
   };
 
+  switchMode = () => {
+    this.setState({ allText: !this.state.allText });
+  };
+
   undo = () => {
     const previousText = this.editorHistory.pop();
 
@@ -68,15 +120,43 @@ class App extends Component {
   };
 
   bold = () => {
-    this.addTag('B');
+    if (this.state.allText) {
+      this.addTagToAllText('B');
+    } else {
+      this.addTagToSelectedText('B');
+    }
   };
 
   italic = () => {
-    this.addTag('I');
+    if (this.state.allText) {
+      this.addTagToAllText('I');
+    } else {
+      this.addTagToSelectedText('I');
+    }
   };
 
   strike = () => {
-    this.addTag('S');
+    if (this.state.allText) {
+      this.addTagToAllText('S');
+    } else {
+      this.addTagToSelectedText('S');
+    }
+  };
+
+  upper = () => {
+    if (this.state.allText) {
+      this.uppercaseAllText();
+    } else {
+      this.uppercaseSelectedText();
+    }
+  };
+
+  lower = () => {
+    if (this.state.allText) {
+      this.lowercaseAllText();
+    } else {
+      this.lowercaseSelectedText();
+    }
   };
 
   split = () => {
@@ -88,40 +168,6 @@ class App extends Component {
     }
   };
 
-  upperAll = () => {
-    const { text } = this.state;
-
-    this.editorHistory.push(text);
-    this.setState({ text: text.toUpperCase() });
-  };
-
-  lowerAll = () => {
-    const { text } = this.state;
-
-    this.editorHistory.push(text);
-    this.setState({ text: text.toLowerCase() });
-  };
-
-  upper = () => {
-    const selectedText = this.getSelectedTextFromEditor();
-    const result = selectedText.toUpperCase();
-
-    if (result !== selectedText) {
-      const text = this.setTextToEditor(result);
-      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
-    }
-  };
-
-  lower = () => {
-    const selectedText = this.getSelectedTextFromEditor();
-    const result = selectedText.toLowerCase();
-
-    if (result !== selectedText) {
-      const text = this.setTextToEditor(result);
-      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
-    }
-  };
-
   render() {
     return (
       <div className='app'>
@@ -129,11 +175,12 @@ class App extends Component {
           <button onClick={this.bold}>B</button>
           <button onClick={this.italic}>I</button>
           <button onClick={this.strike}>S</button>
-          <button onClick={this.split}>-@-</button>
-          <button onClick={this.upperAll}>-AA-</button>
-          <button onClick={this.lowerAll}>-aa-</button>
           <button onClick={this.upper}>AA</button>
           <button onClick={this.lower}>aa</button>
+          <button onClick={this.split}>-@-</button>
+          <button onClick={this.switchMode}>
+            {this.state.allText ? 'All text' : 'Selected text'}
+          </button>
           <button onClick={this.undo} disabled={!this.editorHistory.length}>
             undo
           </button>
