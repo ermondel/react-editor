@@ -47,47 +47,6 @@ class App extends Component {
     }
   }
 
-  changeCase(type) {
-    const { selectionStart, selectionEnd } = this.state;
-    const ref = this.editorRef.current;
-
-    if (type && selectionStart !== selectionEnd) {
-      const currentText = ref.value;
-      const selectedText = currentText.substring(selectionStart, selectionEnd);
-
-      let insertText;
-
-      switch (type) {
-        case 'upper':
-          insertText = selectedText.toUpperCase();
-          break;
-
-        case 'lower':
-          insertText = selectedText.toLowerCase();
-          break;
-
-        default:
-          insertText = selectedText;
-          break;
-      }
-
-      if (selectedText === insertText) {
-        // no difference
-        return;
-      }
-
-      ref.setRangeText(insertText, selectionStart, selectionEnd, 'end');
-      ref.focus();
-
-      this.editorHistory.push(currentText);
-      this.setState({
-        text: ref.value,
-        selectionStart: 0,
-        selectionEnd: 0,
-      });
-    }
-  }
-
   onEditorChange = (event) => {
     this.setState({ text: event.target.value });
   };
@@ -144,11 +103,23 @@ class App extends Component {
   };
 
   upper = () => {
-    this.changeCase('upper');
+    const selectedText = this.getSelectedTextFromEditor();
+    const result = selectedText.toUpperCase();
+
+    if (result !== selectedText) {
+      const text = this.setTextToEditor(result);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
   };
 
   lower = () => {
-    this.changeCase('lower');
+    const selectedText = this.getSelectedTextFromEditor();
+    const result = selectedText.toLowerCase();
+
+    if (result !== selectedText) {
+      const text = this.setTextToEditor(result);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
   };
 
   render() {
