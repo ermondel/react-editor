@@ -14,7 +14,7 @@ class App extends Component {
     const { selectionStart, selectionEnd } = this.state;
     const ref = this.editorRef.current;
 
-    if (tagName && selectionStart !== selectionEnd) {
+    if (selectionStart !== selectionEnd) {
       const currentText = ref.value;
       const selectedText = currentText.substring(selectionStart, selectionEnd);
       const insertText = `[${tagName}]${selectedText}[/${tagName}]`;
@@ -23,7 +23,11 @@ class App extends Component {
       ref.focus();
 
       this.editorHistory.push(currentText);
-      this.setState({ text: ref.value });
+      this.setState({
+        text: ref.value,
+        selectionStart: 0,
+        selectionEnd: 0,
+      });
     }
   }
 
@@ -60,7 +64,11 @@ class App extends Component {
       ref.focus();
 
       this.editorHistory.push(currentText);
-      this.setState({ text: ref.value });
+      this.setState({
+        text: ref.value,
+        selectionStart: 0,
+        selectionEnd: 0,
+      });
     }
   }
 
