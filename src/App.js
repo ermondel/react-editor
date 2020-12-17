@@ -10,24 +10,40 @@ class App extends Component {
   editorRef = React.createRef();
   editorHistory = [];
 
-  addTag(tagName) {
-    const { selectionStart, selectionEnd } = this.state;
-    const ref = this.editorRef.current;
+  getSelectedTextFromEditor() {
+    if (this.state.selectionStart === this.state.selectionEnd) {
+      return '';
+    }
 
-    if (selectionStart !== selectionEnd) {
-      const currentText = ref.value;
-      const selectedText = currentText.substring(selectionStart, selectionEnd);
-      const insertText = `[${tagName}]${selectedText}[/${tagName}]`;
+    return this.editorRef.current.value.substring(
+      this.state.selectionStart,
+      this.state.selectionEnd
+    );
+  }
 
-      ref.setRangeText(insertText, selectionStart, selectionEnd, 'end');
-      ref.focus();
+  setTextToEditor(text) {
+    const editor = this.editorRef.current;
 
-      this.editorHistory.push(currentText);
-      this.setState({
-        text: ref.value,
-        selectionStart: 0,
-        selectionEnd: 0,
-      });
+    this.editorHistory.push(editor.value);
+
+    editor.setRangeText(
+      text,
+      this.state.selectionStart,
+      this.state.selectionEnd,
+      'end'
+    );
+
+    editor.focus();
+
+    return editor.value;
+  }
+
+  addTag(type) {
+    const selectedText = this.getSelectedTextFromEditor();
+
+    if (selectedText) {
+      const text = this.setTextToEditor(`[${type}]${selectedText}[/${type}]`);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
     }
   }
 
