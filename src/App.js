@@ -39,11 +39,19 @@ class App extends Component {
     return editor.value;
   }
 
+  addTag(type, text) {
+    if (text.indexOf('\n') >= 0) {
+      text = text.replaceAll(/ *\n */g, `[/${type}]\n[${type}]`);
+    }
+
+    return `[${type}]${text}[/${type}]`;
+  }
+
   addTagToSelectedText(type) {
     const selectedText = this.getSelectedTextFromEditor();
 
     if (selectedText) {
-      const text = this.setTextToEditor(`[${type}]${selectedText}[/${type}]`);
+      const text = this.setTextToEditor(this.addTag(type, selectedText));
       this.setState({ text, selectionStart: 0, selectionEnd: 0 });
     }
   }
@@ -86,7 +94,7 @@ class App extends Component {
     const { text } = this.state;
 
     this.editorHistory.push(text);
-    this.setState({ text: `[${type}]${text}[/${type}]` });
+    this.setState({ text: this.addTag(type, text) });
   }
 
   uppercaseAllText() {
