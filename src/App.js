@@ -179,6 +179,16 @@ class App extends Component {
     }
   };
 
+  spoiler = () => {
+    if (this.state.allText) {
+      this.addTagToAllText('SPOILER');
+    } else if (this.state.selectionStart !== this.state.selectionEnd) {
+      this.addTagToSelectedText('SPOILER');
+    } else {
+      this.addTagToCurrentPosition('SPOILER');
+    }
+  };
+
   upper = () => {
     if (this.state.allText) {
       this.uppercaseAllText();
@@ -210,6 +220,7 @@ class App extends Component {
           <button onClick={this.bold}>B</button>
           <button onClick={this.italic}>I</button>
           <button onClick={this.strike}>S</button>
+          <button onClick={this.spoiler}>&#9632;</button>
           <button onClick={this.upper}>AA</button>
           <button onClick={this.lower}>aa</button>
           <button onClick={this.atsign}>@</button>
