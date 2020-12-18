@@ -73,6 +73,15 @@ class App extends Component {
     }
   }
 
+  atsignSelectedText() {
+    const selectedText = this.getSelectedTextFromEditor();
+
+    if (selectedText.indexOf('\n') >= 0) {
+      const text = this.setTextToEditor(selectedText.replaceAll(/\n/g, '\n@\n'));
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
   addTagToAllText(type) {
     const { text } = this.state;
 
@@ -97,6 +106,15 @@ class App extends Component {
     if (result !== text) {
       this.editorHistory.push(text);
       this.setState({ text: result });
+    }
+  }
+
+  atsignAllText() {
+    const { text } = this.state;
+
+    if (text.indexOf('\n') >= 0) {
+      this.editorHistory.push(text);
+      this.setState({ text: text.replaceAll(/\n/g, '\n@\n') });
     }
   }
 
@@ -169,12 +187,11 @@ class App extends Component {
     }
   };
 
-  split = () => {
-    const { text } = this.state;
-
-    if (text.indexOf('@') >= 0) {
-      this.editorHistory.push(text);
-      this.setState({ text: text.replaceAll(/ *@ */g, '\r\n@\r\n') });
+  atsign = () => {
+    if (this.state.allText) {
+      this.atsignAllText();
+    } else {
+      this.atsignSelectedText();
     }
   };
 
@@ -187,7 +204,7 @@ class App extends Component {
           <button onClick={this.strike}>S</button>
           <button onClick={this.upper}>AA</button>
           <button onClick={this.lower}>aa</button>
-          <button onClick={this.split}>-@-</button>
+          <button onClick={this.atsign}>@</button>
           <button onClick={this.switchMode}>
             {this.state.allText ? 'All text' : 'Selected text'}
           </button>
