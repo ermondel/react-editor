@@ -217,25 +217,42 @@ class App extends Component {
     return (
       <div className='app'>
         <div className='panel'>
-          <button onClick={this.bold}>B</button>
-          <button onClick={this.italic}>I</button>
-          <button onClick={this.strike}>S</button>
-          <button onClick={this.spoiler}>&#9632;</button>
-          <button onClick={this.upper}>AA</button>
-          <button onClick={this.lower}>aa</button>
-          <button onClick={this.atsign}>@</button>
-          <label>
-            <input
-              type='checkbox'
-              name='mode'
-              onChange={this.switchMode}
-              checked={this.state.allText}
-            />
-            Apply to all text
-          </label>
-          <button onClick={this.undo} disabled={!this.editorHistory.length}>
-            undo
-          </button>
+          <div className='panel__main'>
+            <button onClick={this.bold} title='bold' className='panel__btn'>
+              B
+            </button>
+            <button onClick={this.italic} title='italic' className='panel__btn'>
+              I
+            </button>
+            <button
+              onClick={this.strike}
+              title='strikethrough'
+              className='panel__btn'
+            >
+              S
+            </button>
+            <button onClick={this.spoiler} title='spoiler' className='panel__btn'>
+              &#9632;
+            </button>
+            <button onClick={this.upper} title='uppercase' className='panel__btn'>
+              AA
+            </button>
+            <button onClick={this.lower} title='lowercase' className='panel__btn'>
+              aa
+            </button>
+            <button onClick={this.atsign} title='@ list' className='panel__btn'>
+              @
+            </button>
+          </div>
+          <div className='panel__aside'>
+            <button
+              onClick={this.undo}
+              disabled={!this.editorHistory.length}
+              className='panel__btn panel__btn--undo'
+            >
+              undo
+            </button>
+          </div>
         </div>
 
         <textarea
@@ -246,6 +263,18 @@ class App extends Component {
           onSelect={this.onTextSelect}
           ref={this.editorRef}
         ></textarea>
+
+        <div>
+          <label className='panel__chkbox'>
+            <input
+              type='checkbox'
+              name='mode'
+              onChange={this.switchMode}
+              checked={this.state.allText}
+            />{' '}
+            Apply to all text
+          </label>
+        </div>
       </div>
     );
   }
