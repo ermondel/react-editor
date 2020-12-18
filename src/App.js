@@ -213,9 +213,15 @@ class App extends Component {
           <button onClick={this.upper}>AA</button>
           <button onClick={this.lower}>aa</button>
           <button onClick={this.atsign}>@</button>
-          <button onClick={this.switchMode}>
-            {this.state.allText ? 'All text' : 'Selected text'}
-          </button>
+          <label>
+            <input
+              type='checkbox'
+              name='mode'
+              onChange={this.switchMode}
+              checked={this.state.allText}
+            />
+            Apply to all text
+          </label>
           <button onClick={this.undo} disabled={!this.editorHistory.length}>
             undo
           </button>
