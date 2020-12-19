@@ -39,62 +39,55 @@ class App extends Component {
     return editor.value;
   }
 
-  addTag(type, text) {
+  wrapTextInTag(tag, text) {
     if (text.indexOf('\n') >= 0) {
-      text = text.replaceAll(/ *\n */g, `[/${type}]\n[${type}]`);
+      text = text.replaceAll(/ *\n */g, `[/${tag}]\n[${tag}]`);
     }
 
-    return `[${type}]${text}[/${type}]`;
+    return `[${tag}]${text}[/${tag}]`;
   }
 
-  addTagToSelectedText(type) {
-    const selectedText = this.getSelectedTextFromEditor();
-
-    if (selectedText) {
-      const text = this.setTextToEditor(this.addTag(type, selectedText));
-      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+  addTag(tag) {
+    if (this.state.allText) {
+      this.addTagToAllText(tag);
+    } else if (this.state.selectionStart !== this.state.selectionEnd) {
+      this.addTagToSelectedText(tag);
+    } else {
+      this.addTagToCurrentPosition(tag);
     }
+
+    this.editorRef.current.focus();
   }
 
-  addTagToCurrentPosition(type) {
-    const text = this.setTextToEditor(`[${type}][/${type}]`);
-    this.setState({ text, selectionStart: 0, selectionEnd: 0 });
-  }
-
-  uppercaseSelectedText() {
-    const selectedText = this.getSelectedTextFromEditor();
-    const result = selectedText.toUpperCase();
-
-    if (result !== selectedText) {
-      const text = this.setTextToEditor(result);
-      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
-    }
-  }
-
-  lowercaseSelectedText() {
-    const selectedText = this.getSelectedTextFromEditor();
-    const result = selectedText.toLowerCase();
-
-    if (result !== selectedText) {
-      const text = this.setTextToEditor(result);
-      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
-    }
-  }
-
-  atsignSelectedText() {
-    const selectedText = this.getSelectedTextFromEditor();
-
-    if (selectedText.indexOf('\n') >= 0) {
-      const text = this.setTextToEditor(selectedText.replaceAll(/\n/g, '\n@\n'));
-      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
-    }
-  }
-
-  addTagToAllText(type) {
+  addTagToAllText(tag) {
     const { text } = this.state;
 
     this.editorHistory.push(text);
-    this.setState({ text: this.addTag(type, text) });
+    this.setState({ text: this.wrapTextInTag(tag, text) });
+  }
+
+  addTagToSelectedText(tag) {
+    const selectedText = this.getSelectedTextFromEditor();
+
+    if (selectedText) {
+      const text = this.setTextToEditor(this.wrapTextInTag(tag, selectedText));
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
+  addTagToCurrentPosition(tag) {
+    const text = this.setTextToEditor(`[${tag}][/${tag}]`);
+    this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+  }
+
+  changeCase(upper) {
+    if (this.state.allText) {
+      upper ? this.uppercaseAllText() : this.lowercaseAllText();
+    } else {
+      upper ? this.uppercaseSelectedText() : this.lowercaseSelectedText();
+    }
+
+    this.editorRef.current.focus();
   }
 
   uppercaseAllText() {
@@ -117,14 +110,68 @@ class App extends Component {
     }
   }
 
-  atsignAllText() {
+  uppercaseSelectedText() {
+    const selectedText = this.getSelectedTextFromEditor();
+    const result = selectedText.toUpperCase();
+
+    if (result !== selectedText) {
+      const text = this.setTextToEditor(result);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
+  lowercaseSelectedText() {
+    const selectedText = this.getSelectedTextFromEditor();
+    const result = selectedText.toLowerCase();
+
+    if (result !== selectedText) {
+      const text = this.setTextToEditor(result);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+    }
+  }
+
+  splitText(separator) {
+    if (this.state.allText) {
+      this.splitAllText(separator);
+    } else {
+      this.splitSelectedText(separator);
+    }
+  }
+
+  splitAllText(separator) {
     const { text } = this.state;
 
     if (text.indexOf('\n') >= 0) {
       this.editorHistory.push(text);
-      this.setState({ text: text.replaceAll(/\n/g, '\n@\n') });
+      this.setState({ text: text.replaceAll(/\n/g, `\n${separator}\n`) });
+    }
+
+    this.editorRef.current.focus();
+  }
+
+  splitSelectedText(separator) {
+    const selectedText = this.getSelectedTextFromEditor();
+
+    if (selectedText.indexOf('\n') >= 0) {
+      const splittedText = selectedText.replaceAll(/\n/g, `\n${separator}\n`);
+      const text = this.setTextToEditor(splittedText);
+      this.setState({ text, selectionStart: 0, selectionEnd: 0 });
     }
   }
+
+  switchMode = () => {
+    this.setState({ allText: !this.state.allText });
+  };
+
+  undo = () => {
+    const previousText = this.editorHistory.pop();
+
+    if (previousText) {
+      this.setState({ text: previousText });
+    }
+
+    this.editorRef.current.focus();
+  };
 
   onEditorChange = (event) => {
     this.setState({ text: event.target.value });
@@ -137,110 +184,58 @@ class App extends Component {
     });
   };
 
-  switchMode = () => {
-    this.setState({ allText: !this.state.allText });
-  };
-
-  undo = () => {
-    const previousText = this.editorHistory.pop();
-
-    if (previousText) {
-      this.setState({ text: previousText });
-    }
-  };
-
-  bold = () => {
-    if (this.state.allText) {
-      this.addTagToAllText('B');
-    } else if (this.state.selectionStart !== this.state.selectionEnd) {
-      this.addTagToSelectedText('B');
-    } else {
-      this.addTagToCurrentPosition('B');
-    }
-  };
-
-  italic = () => {
-    if (this.state.allText) {
-      this.addTagToAllText('I');
-    } else if (this.state.selectionStart !== this.state.selectionEnd) {
-      this.addTagToSelectedText('I');
-    } else {
-      this.addTagToCurrentPosition('I');
-    }
-  };
-
-  strike = () => {
-    if (this.state.allText) {
-      this.addTagToAllText('S');
-    } else if (this.state.selectionStart !== this.state.selectionEnd) {
-      this.addTagToSelectedText('S');
-    } else {
-      this.addTagToCurrentPosition('S');
-    }
-  };
-
-  spoiler = () => {
-    if (this.state.allText) {
-      this.addTagToAllText('SPOILER');
-    } else if (this.state.selectionStart !== this.state.selectionEnd) {
-      this.addTagToSelectedText('SPOILER');
-    } else {
-      this.addTagToCurrentPosition('SPOILER');
-    }
-  };
-
-  upper = () => {
-    if (this.state.allText) {
-      this.uppercaseAllText();
-    } else {
-      this.uppercaseSelectedText();
-    }
-  };
-
-  lower = () => {
-    if (this.state.allText) {
-      this.lowercaseAllText();
-    } else {
-      this.lowercaseSelectedText();
-    }
-  };
-
-  atsign = () => {
-    if (this.state.allText) {
-      this.atsignAllText();
-    } else {
-      this.atsignSelectedText();
-    }
-  };
-
   render() {
     return (
       <div className='app'>
         <div className='panel'>
           <div className='panel__main'>
-            <button onClick={this.bold} title='bold' className='panel__btn'>
+            <button
+              onClick={() => this.addTag('B')}
+              title='bold'
+              className='panel__btn'
+            >
               B
             </button>
-            <button onClick={this.italic} title='italic' className='panel__btn'>
+            <button
+              onClick={() => this.addTag('I')}
+              title='italic'
+              className='panel__btn'
+            >
               I
             </button>
             <button
-              onClick={this.strike}
+              onClick={() => this.addTag('S')}
               title='strikethrough'
               className='panel__btn'
             >
               S
             </button>
-            <button onClick={this.spoiler} title='spoiler' className='panel__btn'>
+            <button
+              onClick={() => this.addTag('SPOILER')}
+              title='spoiler'
+              className='panel__btn'
+            >
               &#9632;
             </button>
-            <button onClick={this.upper} title='uppercase' className='panel__btn'>
+            <button
+              onClick={() => this.changeCase(true)}
+              title='uppercase'
+              className='panel__btn'
+            >
               AA
             </button>
-            <button onClick={this.lower} title='lowercase' className='panel__btn'>
+            <button
+              onClick={() => this.changeCase(false)}
+              title='lowercase'
+              className='panel__btn'
+            >
               aa
             </button>
-            <button onClick={this.atsign} title='@ list' className='panel__btn'>
+            <button
+              onClick={() => this.splitText('@')}
+              title='@ list'
+              className='panel__btn'
+            >
               @
             </button>
           </div>
