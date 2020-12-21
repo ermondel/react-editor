@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import Panel from './components/Panel';
+import Editor from './components/Editor';
+import Underside from './components/Underside';
 
 class App extends Component {
   state = {
-    text: 'Lorem ipsum dolor sit amet.',
+    text: '',
     selectionStart: 0,
     selectionEnd: 0,
     allText: false,
@@ -10,6 +13,18 @@ class App extends Component {
 
   editorRef = React.createRef();
   editorHistory = [];
+
+  constructor(props) {
+    super(props);
+
+    this.addTag = this.addTag.bind(this);
+    this.changeCase = this.changeCase.bind(this);
+    this.splitText = this.splitText.bind(this);
+    this.undo = this.undo.bind(this);
+    this.onEditorChange = this.onEditorChange.bind(this);
+    this.onTextSelect = this.onTextSelect.bind(this);
+    this.switchMode = this.switchMode.bind(this);
+  }
 
   getSelectedTextFromEditor() {
     if (this.state.selectionStart === this.state.selectionEnd) {
@@ -159,11 +174,11 @@ class App extends Component {
     }
   }
 
-  switchMode = () => {
+  switchMode() {
     this.setState({ allText: !this.state.allText });
-  };
+  }
 
-  undo = () => {
+  undo() {
     const previousText = this.editorHistory.pop();
 
     if (previousText) {
@@ -171,105 +186,38 @@ class App extends Component {
     }
 
     this.editorRef.current.focus();
-  };
+  }
 
-  onEditorChange = (event) => {
+  onEditorChange(event) {
     this.setState({ text: event.target.value });
-  };
+  }
 
-  onTextSelect = (event) => {
+  onTextSelect(event) {
     this.setState({
       selectionStart: event.target.selectionStart,
       selectionEnd: event.target.selectionEnd,
     });
-  };
+  }
 
   render() {
     return (
       <div className='app'>
-        <div className='panel'>
-          <div className='panel__main'>
-            <button
-              onClick={() => this.addTag('B')}
-              title='bold'
-              className='panel__btn'
-            >
-              B
-            </button>
-            <button
-              onClick={() => this.addTag('I')}
-              title='italic'
-              className='panel__btn'
-            >
-              I
-            </button>
-            <button
-              onClick={() => this.addTag('S')}
-              title='strikethrough'
-              className='panel__btn'
-            >
-              S
-            </button>
-            <button
-              onClick={() => this.addTag('SPOILER')}
-              title='spoiler'
-              className='panel__btn'
-            >
-              &#9632;
-            </button>
-            <button
-              onClick={() => this.changeCase(true)}
-              title='uppercase'
-              className='panel__btn'
-            >
-              AA
-            </button>
-            <button
-              onClick={() => this.changeCase(false)}
-              title='lowercase'
-              className='panel__btn'
-            >
-              aa
-            </button>
-            <button
-              onClick={() => this.splitText('@')}
-              title='@ list'
-              className='panel__btn'
-            >
-              @
-            </button>
-          </div>
-          <div className='panel__aside'>
-            <button
-              onClick={this.undo}
-              disabled={!this.editorHistory.length}
-              className='panel__btn panel__btn--undo'
-            >
-              undo
-            </button>
-          </div>
-        </div>
+        <Panel
+          addTag={this.addTag}
+          changeCase={this.changeCase}
+          splitText={this.splitText}
+          undo={this.undo}
+          historyLength={this.editorHistory.length}
+        />
 
-        <textarea
-          id='editor'
-          className='editor'
-          value={this.state.text}
+        <Editor
+          text={this.state.text}
           onChange={this.onEditorChange}
           onSelect={this.onTextSelect}
-          ref={this.editorRef}
-        ></textarea>
+          editorRef={this.editorRef}
+        />
 
-        <div>
-          <label className='panel__chkbox'>
-            <input
-              type='checkbox'
-              name='mode'
-              onChange={this.switchMode}
-              checked={this.state.allText}
-            />{' '}
-            Apply to all text
-          </label>
-        </div>
+        <Underside switchMode={this.switchMode} allText={this.state.allText} />
       </div>
     );
   }
