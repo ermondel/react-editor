@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Panel from './components/Panel';
 import Editor from './components/Editor';
 import Underside from './components/Underside';
+import Preview from './components/Preview';
 
 class App extends Component {
   state = {
@@ -218,6 +219,8 @@ class App extends Component {
         />
 
         <Underside switchMode={this.switchMode} allText={this.state.allText} />
+
+        <Preview text={this.state.text} />
       </div>
     );
   }
