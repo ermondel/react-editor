@@ -3,6 +3,7 @@ import Panel from './components/Panel';
 import Editor from './components/Editor';
 import Underside from './components/Underside';
 import Preview from './components/Preview';
+import { formatFilename } from './format';
 
 class App extends Component {
   state = {
@@ -25,6 +26,7 @@ class App extends Component {
     this.onEditorChange = this.onEditorChange.bind(this);
     this.onTextSelect = this.onTextSelect.bind(this);
     this.switchMode = this.switchMode.bind(this);
+    this.formatAsFilename = this.formatAsFilename.bind(this);
   }
 
   getSelectedTextFromEditor() {
@@ -175,6 +177,44 @@ class App extends Component {
     }
   }
 
+  formatAsFilename() {
+    if (this.state.allText) {
+      this.formatAsFilenameAllText();
+    } else {
+      this.formatAsFilenameSelectedText();
+    }
+  }
+
+  formatAsFilenameAllText() {
+    const { text } = this.state;
+
+    if (text) {
+      const formattedText = formatFilename(text);
+
+      if (formattedText !== text) {
+        this.editorHistory.push(text);
+        this.setState({ text: formattedText });
+      }
+    }
+
+    this.editorRef.current.focus();
+  }
+
+  formatAsFilenameSelectedText() {
+    const selectedText = this.getSelectedTextFromEditor();
+
+    if (selectedText) {
+      const formattedText = formatFilename(selectedText);
+
+      if (formattedText !== selectedText) {
+        const text = this.setTextToEditor(formattedText);
+        this.setState({ text, selectionStart: 0, selectionEnd: 0 });
+      }
+    }
+
+    this.editorRef.current.focus();
+  }
+
   switchMode() {
     this.setState({ allText: !this.state.allText });
   }
@@ -207,6 +247,7 @@ class App extends Component {
           addTag={this.addTag}
           changeCase={this.changeCase}
           splitText={this.splitText}
+          formatAsFilename={this.formatAsFilename}
           undo={this.undo}
           historyLength={this.editorHistory.length}
         />
