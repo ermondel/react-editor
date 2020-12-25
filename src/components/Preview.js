@@ -1,5 +1,5 @@
 import React from 'react';
-import { bbcodeToHTML } from '../bbcode';
+import { bbcodeToHTML } from '../editor';
 
 const Preview = ({ text }) => (
   <div

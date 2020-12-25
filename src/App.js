@@ -3,7 +3,7 @@ import Panel from './components/Panel';
 import Editor from './components/Editor';
 import Underside from './components/Underside';
 import Preview from './components/Preview';
-import { formatFilename } from './format';
+import { formatFilename } from './editor';
 
 class App extends Component {
   state = {

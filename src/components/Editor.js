@@ -1,5 +1,5 @@
 import React from 'react';
-import { lengthWithoutSpaces } from '../format';
+import { lengthWithoutSpaces } from '../editor';
 
 const Editor = (props) => {
   let lengthSelected = 0;
