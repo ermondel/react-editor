@@ -25,6 +25,11 @@ const Panel = (props) => (
         title='discard changes'
         val='D'
       />
+      <PanelBtn
+        click={() => props.addToClipboard()}
+        title='add text to clipboard'
+        val='C'
+      />
     </div>
     <div className='panel__aside'>
       <PanelBtn

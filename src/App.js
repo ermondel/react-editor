@@ -28,6 +28,7 @@ class App extends Component {
     this.switchMode = this.switchMode.bind(this);
     this.formatAsFilename = this.formatAsFilename.bind(this);
     this.discardChanges = this.discardChanges.bind(this);
+    this.addToClipboard = this.addToClipboard.bind(this);
   }
 
   getSelectedTextFromEditor() {
@@ -227,6 +228,16 @@ class App extends Component {
     this.editorRef.current.focus();
   }
 
+  addToClipboard() {
+    const { text } = this.state;
+
+    if (text && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+    }
+
+    this.editorRef.current.focus();
+  }
+
   switchMode() {
     this.setState({ allText: !this.state.allText });
   }
@@ -263,6 +274,7 @@ class App extends Component {
           undo={this.undo}
           historyLength={this.editorHistory.length}
           discardChanges={this.discardChanges}
+          addToClipboard={this.addToClipboard}
         />
 
         <Editor
