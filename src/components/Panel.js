@@ -21,21 +21,19 @@ const Panel = (props) => (
         val='F'
       />
       <PanelBtn
+        click={() => props.addToClipboard()}
+        title='add to clipboard'
+        val='#'
+      />
+      <PanelBtn
         click={() => props.discardChanges()}
         title='discard changes'
-        val='D'
-      />
-      <PanelBtn
-        click={() => props.addToClipboard()}
-        title='add text to clipboard'
         val='C'
       />
-    </div>
-    <div className='panel__aside'>
       <PanelBtn
         click={props.undo}
-        val='undo'
-        mod='undo'
+        title='undo'
+        val='U'
         disabled={!props.historyLength}
       />
     </div>
