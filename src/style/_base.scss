@@ -10,11 +10,38 @@ body {
 }
 
 .editor {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.editor__counters {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  padding: 5px 10px 5px 10px;
+  font-size: 14px;
+  color: grey;
+}
+
+.editor__counter {
+  cursor: help;
+  padding-right: 7px;
+  margin-right: 7px;
+  border-right: 1px solid #dddddd;
+
+  &:last-child {
+    padding-right: 0;
+    margin-right: 0;
+    border-right: none;
+  }
+}
+
+.editor__textarea {
   width: 100%;
   min-height: 250px;
-  padding: 10px;
+  padding: 35px 10px 10px 10px;
   box-sizing: border-box;
-  margin: 0 0 10px 0;
   border: 1px solid lightgrey;
   display: block;
   border-radius: 4px;
@@ -28,6 +55,7 @@ body {
 .panel {
   margin-bottom: 15px;
   display: flex;
+  align-items: center;
 }
 
 .panel__aside {
@@ -72,6 +100,11 @@ body {
   margin: 0 5px 0 0;
   cursor: pointer;
   color: black;
+}
+
+.panel__counter {
+  font-size: 80%;
+  color: #6495ed;
 }
 
 .underside {

@@ -282,6 +282,8 @@ class App extends Component {
           onChange={this.onEditorChange}
           onSelect={this.onTextSelect}
           editorRef={this.editorRef}
+          selectionStart={this.state.selectionStart}
+          selectionEnd={this.state.selectionEnd}
         />
 
         <Underside switchMode={this.switchMode} allText={this.state.allText} />

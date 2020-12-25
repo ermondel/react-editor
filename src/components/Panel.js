@@ -29,6 +29,7 @@ const Panel = (props) => (
         click={() => props.discardChanges()}
         title='discard changes'
         val='C'
+        disabled={!props.historyLength}
       />
       <PanelBtn
         click={props.undo}
