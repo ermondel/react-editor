@@ -27,6 +27,7 @@ class App extends Component {
     this.onTextSelect = this.onTextSelect.bind(this);
     this.switchMode = this.switchMode.bind(this);
     this.formatAsFilename = this.formatAsFilename.bind(this);
+    this.discardChanges = this.discardChanges.bind(this);
   }
 
   getSelectedTextFromEditor() {
@@ -215,6 +216,17 @@ class App extends Component {
     this.editorRef.current.focus();
   }
 
+  discardChanges() {
+    const text = this.editorHistory[0];
+
+    if (text) {
+      this.editorHistory = [];
+      this.setState({ text });
+    }
+
+    this.editorRef.current.focus();
+  }
+
   switchMode() {
     this.setState({ allText: !this.state.allText });
   }
@@ -250,6 +262,7 @@ class App extends Component {
           formatAsFilename={this.formatAsFilename}
           undo={this.undo}
           historyLength={this.editorHistory.length}
+          discardChanges={this.discardChanges}
         />
 
         <Editor

@@ -20,6 +20,11 @@ const Panel = (props) => (
         title='format as filename'
         val='F'
       />
+      <PanelBtn
+        click={() => props.discardChanges()}
+        title='discard changes'
+        val='D'
+      />
     </div>
     <div className='panel__aside'>
       <PanelBtn
