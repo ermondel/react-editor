@@ -1,42 +1,20 @@
 import React from 'react';
 import PanelBtn from './PanelBtn';
 
-const Panel = (props) => (
+const Panel = ({ action, showRollback, discard, undo }) => (
   <div className='panel'>
     <div className='panel__main'>
-      <PanelBtn click={() => props.addTag('B')} title='bold' val='B' />
-      <PanelBtn click={() => props.addTag('I')} title='italic' val='I' />
-      <PanelBtn click={() => props.addTag('S')} title='strikethrough' val='S' />
-      <PanelBtn
-        click={() => props.addTag('SPOILER')}
-        title='spoiler'
-        val='&#9632;'
-      />
-      <PanelBtn click={() => props.changeCase(true)} title='uppercase' val='AA' />
-      <PanelBtn click={() => props.changeCase(false)} title='lowercase' val='aa' />
-      <PanelBtn click={() => props.splitText('@')} title='@ list' val='@' />
-      <PanelBtn
-        click={() => props.formatAsFilename('@')}
-        title='format as filename'
-        val='F'
-      />
-      <PanelBtn
-        click={() => props.addToClipboard()}
-        title='add to clipboard'
-        val='#'
-      />
-      <PanelBtn
-        click={() => props.discardChanges()}
-        title='discard changes'
-        val='C'
-        disabled={!props.historyLength}
-      />
-      <PanelBtn
-        click={props.undo}
-        title='undo'
-        val='U'
-        disabled={!props.historyLength}
-      />
+      <PanelBtn click={() => action(1)} title='bold' val='B' />
+      <PanelBtn click={() => action(2)} title='italic' val='I' />
+      <PanelBtn click={() => action(3)} title='strikethrough' val='S' />
+      <PanelBtn click={() => action(4)} title='spoiler' val='&#9632;' />
+      <PanelBtn click={() => action(5)} title='uppercase' val='AA' />
+      <PanelBtn click={() => action(6)} title='lowercase' val='aa' />
+      <PanelBtn click={() => action(7)} title='@ list' val='@' />
+      <PanelBtn click={() => action(8)} title='add to clipboard' val='#' />
+      <PanelBtn click={() => action(9)} title='format as filename' val='F' />
+      <PanelBtn click={discard} title='discard' val='C' disabled={!showRollback} />
+      <PanelBtn click={undo} title='undo' val='U' disabled={!showRollback} />
     </div>
   </div>
 );

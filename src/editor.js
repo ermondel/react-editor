@@ -42,11 +42,6 @@ export function bbcodeToHTML(text) {
   return res;
 }
 
-// Format the string as a filename
-export function formatFilename(str) {
-  return str.replaceAll(/[^-_().,a-zA-Z0-9 ]/g, '').replaceAll(/ {2,}/g, ' ');
-}
-
 // Get the length of the text without spaces
 export function lengthWithoutSpaces(text) {
   if (text) {
@@ -55,4 +50,28 @@ export function lengthWithoutSpaces(text) {
   }
 
   return 0;
+}
+
+// Format the text as a filename
+export function filename(text) {
+  return text.replaceAll(/[^-_().,a-zA-Z0-9 ]/g, '').replaceAll(/ {2,}/g, ' ');
+}
+
+//
+export function addTag(tag, text) {
+  if (text.indexOf('\n') >= 0) {
+    text = text.replaceAll(/ *\n */g, `[/${tag}]\n[${tag}]`);
+  }
+
+  return `[${tag}]${text}[/${tag}]`;
+}
+
+//
+export function changeCase(upper, text) {
+  return upper ? text.toUpperCase() : text.toLowerCase();
+}
+
+//
+export function splitText(separator, text) {
+  return text.replaceAll(/\n/g, `\n${separator}\n`);
 }
