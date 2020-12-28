@@ -97,7 +97,7 @@ class App extends Component {
         break;
 
       case 10:
-        // nextText = lib.filename(prevText);
+        nextText = lib.addTag('U', prevText);
         break;
 
       default:

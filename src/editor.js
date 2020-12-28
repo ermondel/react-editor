@@ -9,6 +9,8 @@ export function bbcodeToHTML(text) {
     '[/S]': '</span>',
     '[SPOILER]': '<span class="bbcode-spoiler">',
     '[/SPOILER]': '</span>',
+    '[U]': '<span class="bbcode-underline">',
+    '[/U]': '</span>',
   };
 
   let code = false;
