@@ -3,7 +3,7 @@ import Panel from './components/Panel';
 import Editor from './components/Editor';
 import Underside from './components/Underside';
 import Preview from './components/Preview';
-import * as lib from './editor';
+import { addTag, changeCase, splitText, filename } from './editor';
 
 class App extends Component {
   state = {
@@ -58,31 +58,31 @@ class App extends Component {
 
     switch (key) {
       case 1:
-        nextText = lib.addTag('B', prevText);
+        nextText = addTag('B', prevText);
         break;
 
       case 2:
-        nextText = lib.addTag('I', prevText);
+        nextText = addTag('I', prevText);
         break;
 
       case 3:
-        nextText = lib.addTag('S', prevText);
+        nextText = addTag('S', prevText);
         break;
 
       case 4:
-        nextText = lib.addTag('SPOILER', prevText);
+        nextText = addTag('SPOILER', prevText);
         break;
 
       case 5:
-        nextText = lib.changeCase(1, prevText);
+        nextText = changeCase(1, prevText);
         break;
 
       case 6:
-        nextText = lib.changeCase(0, prevText);
+        nextText = changeCase(0, prevText);
         break;
 
       case 7:
-        nextText = lib.splitText('@', prevText);
+        nextText = splitText('@', prevText);
         break;
 
       case 8:
@@ -93,11 +93,11 @@ class App extends Component {
         break;
 
       case 9:
-        nextText = lib.filename(prevText);
+        nextText = filename(prevText);
         break;
 
       case 10:
-        nextText = lib.addTag('U', prevText);
+        nextText = addTag('U', prevText);
         break;
 
       default:
@@ -106,7 +106,7 @@ class App extends Component {
     }
 
     if (prevText !== nextText) {
-      this.editorHistory.push(prevText);
+      this.editorHistory.push(this.state.text);
       this.setText(nextText);
     }
 
