@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Panel from './components/Panel';
+import CommandBar from './components/CommandBar';
 import Editor from './components/Editor';
 import Underside from './components/Underside';
 import Preview from './components/Preview';
@@ -151,8 +151,8 @@ class App extends Component {
 
   render() {
     return (
-      <div className='app'>
-        <Panel
+      <main className='main'>
+        <CommandBar
           action={this.action}
           showRollback={this.editorHistory.length > 0}
           discard={this.discard}
@@ -171,7 +171,7 @@ class App extends Component {
         <Underside switchMode={this.switchMode} allText={this.state.allText} />
 
         <Preview text={this.state.text} />
-      </div>
+      </main>
     );
   }
 }

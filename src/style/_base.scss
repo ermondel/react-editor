@@ -3,10 +3,56 @@ body {
   font-size: 16px;
 }
 
-.app {
+.main {
   width: 100%;
   padding: 10px;
   box-sizing: border-box;
+}
+
+.command-bar {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.command-bar__btn {
+  width: 50px;
+  margin: 0 5px 0 0;
+  padding: 8px 0 8px 0;
+
+  border: none;
+  border-radius: 3px;
+
+  color: black;
+  background: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background-color: lightgrey;
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    color: #dddddd;
+    cursor: default;
+
+    &:hover,
+    &:focus {
+      outline: none;
+      background: none;
+    }
+  }
+}
+
+.command-bar__btn__icon {
+  height: 18px;
+  display: block;
 }
 
 .editor {
@@ -50,60 +96,6 @@ body {
   &:focus {
     outline: none;
   }
-}
-
-.panel {
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-}
-
-.panel__aside {
-  margin-left: auto;
-}
-
-.panel__btn {
-  margin: 0 5px 0 0;
-  padding: 5px;
-  border: none;
-  color: black;
-  border-radius: 3px;
-  background: none;
-  width: 50px;
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    outline: none;
-    background-color: lightgrey;
-    color: white;
-  }
-
-  &:disabled {
-    color: #dddddd;
-    cursor: default;
-
-    &:hover,
-    &:focus {
-      outline: none;
-      background: none;
-    }
-  }
-}
-
-.panel__icon {
-  height: 16px;
-}
-
-.panel__chkbox {
-  margin: 0 5px 0 0;
-  cursor: pointer;
-  color: black;
-}
-
-.panel__counter {
-  font-size: 80%;
-  color: #6495ed;
 }
 
 .underside {
