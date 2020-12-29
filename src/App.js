@@ -57,47 +57,47 @@ class App extends Component {
     let nextText;
 
     switch (key) {
-      case 1:
+      case 10:
         nextText = addTag('B', prevText);
         break;
 
-      case 2:
+      case 11:
         nextText = addTag('I', prevText);
         break;
 
-      case 3:
+      case 12:
         nextText = addTag('S', prevText);
         break;
 
-      case 4:
+      case 13:
+        nextText = addTag('U', prevText);
+        break;
+
+      case 14:
         nextText = addTag('SPOILER', prevText);
         break;
 
-      case 5:
+      case 20:
         nextText = changeCase(1, prevText);
         break;
 
-      case 6:
+      case 21:
         nextText = changeCase(0, prevText);
         break;
 
-      case 7:
+      case 30:
         nextText = splitText('@', prevText);
         break;
 
-      case 8:
+      case 40:
+        nextText = filename(prevText);
+        break;
+
+      case 50:
         if (navigator && navigator.clipboard) {
           navigator.clipboard.writeText(prevText);
         }
         nextText = prevText;
-        break;
-
-      case 9:
-        nextText = filename(prevText);
-        break;
-
-      case 10:
-        nextText = addTag('U', prevText);
         break;
 
       default:
