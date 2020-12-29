@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import CommandBar from './components/CommandBar';
 import Editor from './components/Editor';
-import Underside from './components/Underside';
 import Preview from './components/Preview';
 import { addTag, changeCase, splitText, filename } from './editor';
 
@@ -157,6 +156,8 @@ class App extends Component {
           showRollback={this.editorHistory.length > 0}
           discard={this.discard}
           undo={this.undo}
+          allText={this.state.allText}
+          switchMode={this.switchMode}
         />
 
         <Editor
@@ -167,8 +168,6 @@ class App extends Component {
           selectionStart={this.state.selectionStart}
           selectionEnd={this.state.selectionEnd}
         />
-
-        <Underside switchMode={this.switchMode} allText={this.state.allText} />
 
         <Preview text={this.state.text} />
       </main>

@@ -15,7 +15,19 @@ body {
   align-items: center;
 }
 
-.command-bar__btn {
+.command-bar__main {
+  display: flex;
+  align-items: center;
+}
+
+.command-bar__aside {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.command-bar__btn-sym,
+.command-bar__btn-img {
   width: 50px;
   margin: 0 5px 0 0;
   padding: 8px 0 8px 0;
@@ -47,6 +59,29 @@ body {
       outline: none;
       background: none;
     }
+  }
+}
+
+.command-bar__btn-str {
+  margin: 0;
+  padding: 8px;
+
+  border: 1px solid transparent;
+
+  color: #333333;
+  font-size: 15px;
+  background: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+
+  &:hover,
+  &:focus,
+  &:disabled {
+    outline: none;
+    color: limegreen;
+    border-bottom: 1px dashed black;
   }
 }
 
