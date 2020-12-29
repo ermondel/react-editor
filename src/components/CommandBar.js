@@ -13,6 +13,7 @@ const CommandBar = ({
   undo,
   allText,
   switchMode,
+  clipboard,
 }) => (
   <div className='command-bar'>
     <div className='command-bar__main'>
@@ -52,7 +53,7 @@ const CommandBar = ({
         &f
       </BtnSym>
 
-      <BtnImg click={() => action(50)} title='add to clipboard'>
+      <BtnImg click={clipboard} title='add to clipboard'>
         <IconPaste />
       </BtnImg>
 

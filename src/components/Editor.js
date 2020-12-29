@@ -1,4 +1,5 @@
 import React from 'react';
+import EditorMessage from './EditorMessage';
 import { lengthWithoutSpaces } from '../editor';
 
 const Editor = (props) => {
@@ -23,6 +24,7 @@ const Editor = (props) => {
         <span className='editor__counter' title='Number of selected characters'>
           {lengthSelected}
         </span>
+        <EditorMessage message={props.message} />
       </div>
 
       <textarea

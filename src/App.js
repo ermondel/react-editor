@@ -10,6 +10,7 @@ class App extends Component {
     selectionStart: 0,
     selectionEnd: 0,
     allText: false,
+    message: '',
   };
 
   editorRef = React.createRef();
@@ -52,7 +53,7 @@ class App extends Component {
   }
 
   action = (key) => {
-    let prevText = this.getText();
+    const prevText = this.getText();
     let nextText;
 
     switch (key) {
@@ -92,13 +93,6 @@ class App extends Component {
         nextText = filename(prevText);
         break;
 
-      case 50:
-        if (navigator && navigator.clipboard) {
-          navigator.clipboard.writeText(prevText);
-        }
-        nextText = prevText;
-        break;
-
       default:
         console.log('[APP] command not found');
         break;
@@ -133,6 +127,34 @@ class App extends Component {
     this.editorRef.current.focus();
   };
 
+  clipboard = () => {
+    if (!navigator.clipboard) {
+      return;
+    }
+
+    const text = this.getText();
+
+    if (!text) {
+      this.editorRef.current.focus();
+      return;
+    }
+
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        this.setState({ message: '✓ Copied to clipboard' });
+
+        return new Promise((resolve) => {
+          setTimeout(() => resolve(), 2000);
+        });
+      })
+      .then(() => {
+        this.setState({ message: '' });
+      });
+
+    this.editorRef.current.focus();
+  };
+
   onEditorChange = (event) => {
     this.setState({ text: event.target.value });
   };
@@ -158,6 +180,7 @@ class App extends Component {
           undo={this.undo}
           allText={this.state.allText}
           switchMode={this.switchMode}
+          clipboard={this.clipboard}
         />
 
         <Editor
@@ -167,6 +190,7 @@ class App extends Component {
           editorRef={this.editorRef}
           selectionStart={this.state.selectionStart}
           selectionEnd={this.state.selectionEnd}
+          message={this.state.message}
         />
 
         <Preview text={this.state.text} />
