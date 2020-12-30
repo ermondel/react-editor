@@ -59,10 +59,16 @@ export function filename(text) {
   return text.replaceAll(/[^-_().,a-zA-Z0-9 ]/g, '').replaceAll(/ {2,}/g, ' ');
 }
 
-//
+// Wrap text in a tag
 export function addTag(tag, text) {
   if (text.indexOf('\n') >= 0) {
-    text = text.replaceAll(/ *\n */g, `[/${tag}]\n[${tag}]`);
+    let arr = text.split('\n');
+
+    arr.forEach((val, key) => {
+      arr[key] = val.trim().length ? `[${tag}]${val}[/${tag}]` : val;
+    });
+
+    return arr.join('\n');
   }
 
   return `[${tag}]${text}[/${tag}]`;
