@@ -31,19 +31,22 @@ class App extends Component {
     );
   }
 
-  setText(text) {
+  setText(text, positionOffset) {
     if (this.state.allText) {
       this.setState({ text });
 
       return;
     }
 
-    this.editorRef.current.setRangeText(
-      text,
-      this.state.selectionStart,
-      this.state.selectionEnd,
-      'end'
-    );
+    const start = this.state.selectionStart;
+    const end = this.state.selectionEnd;
+
+    this.editorRef.current.setRangeText(text, start, end, 'end');
+
+    if (positionOffset && start === end) {
+      this.editorRef.current.selectionStart = start + positionOffset;
+      this.editorRef.current.selectionEnd = start + positionOffset;
+    }
 
     this.setState({
       text: this.editorRef.current.value,
@@ -55,26 +58,32 @@ class App extends Component {
   action = (key) => {
     const prevText = this.getText();
     let nextText;
+    let positionOffset;
 
     switch (key) {
       case 10:
         nextText = addTag('B', prevText);
+        positionOffset = 3;
         break;
 
       case 11:
         nextText = addTag('I', prevText);
+        positionOffset = 3;
         break;
 
       case 12:
         nextText = addTag('S', prevText);
+        positionOffset = 3;
         break;
 
       case 13:
         nextText = addTag('U', prevText);
+        positionOffset = 3;
         break;
 
       case 14:
         nextText = addTag('SPOILER', prevText);
+        positionOffset = 9;
         break;
 
       case 20:
@@ -100,7 +109,7 @@ class App extends Component {
 
     if (prevText !== nextText) {
       this.editorHistory.push(this.state.text);
-      this.setText(nextText);
+      this.setText(nextText, positionOffset);
     }
 
     this.editorRef.current.focus();
