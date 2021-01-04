@@ -179,6 +179,70 @@ class App extends Component {
     this.setState({ allText: !this.state.allText });
   };
 
+  hotkeys = (event) => {
+    if (!event.altKey) {
+      return;
+    }
+
+    switch (event.code) {
+      case 'KeyB':
+        this.action(10);
+        break;
+
+      case 'KeyI':
+        this.action(11);
+        break;
+
+      case 'KeyS':
+        this.action(12);
+        break;
+
+      case 'KeyU':
+        this.action(13);
+        break;
+
+      case 'KeyP':
+        this.action(14);
+        break;
+
+      case 'ArrowUp':
+        this.action(20);
+        break;
+
+      case 'ArrowDown':
+        this.action(21);
+        break;
+
+      case 'KeyJ':
+        this.action(30);
+        break;
+
+      case 'KeyN':
+        this.action(40);
+        break;
+
+      case 'KeyZ':
+        this.undo();
+        break;
+
+      case 'KeyX':
+        this.discard();
+        break;
+
+      case 'KeyQ':
+        this.clipboard();
+        break;
+
+      case 'BracketLeft':
+      case 'BracketRight':
+        this.switchMode();
+        break;
+
+      default:
+        return;
+    }
+  };
+
   render() {
     return (
       <main className='main'>
@@ -200,6 +264,7 @@ class App extends Component {
           selectionStart={this.state.selectionStart}
           selectionEnd={this.state.selectionEnd}
           message={this.state.message}
+          onKeyDown={this.hotkeys}
         />
 
         <Preview text={this.state.text} />

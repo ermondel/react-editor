@@ -16,6 +16,7 @@ const Editor = (props) => (
       onChange={props.onChange}
       onSelect={props.onSelect}
       ref={props.editorRef}
+      onKeyDown={props.onKeyDown}
     ></textarea>
   </div>
 );
