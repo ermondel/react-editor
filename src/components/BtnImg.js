@@ -4,7 +4,7 @@ const BtnImg = ({ click, title = '', disabled = false, children }) => (
   <button
     onClick={click}
     title={title}
-    className='command-bar__btn-img'
+    className='command-bar__btn'
     disabled={disabled}
   >
     {children}

@@ -4,7 +4,7 @@ const BtnSym = ({ click, title = '', disabled = false, children }) => (
   <button
     onClick={click}
     title={title}
-    className='command-bar__btn-sym'
+    className='command-bar__btn'
     disabled={disabled}
   >
     {children}

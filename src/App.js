@@ -175,8 +175,19 @@ class App extends Component {
     });
   };
 
-  switchMode = () => {
-    this.setState({ allText: !this.state.allText });
+  switchMode = (val) => {
+    this.editorRef.current.focus();
+
+    if (typeof val !== 'boolean') {
+      this.setState({ allText: !this.state.allText });
+      return;
+    }
+
+    if (val === this.state.allText) {
+      return;
+    }
+
+    this.setState({ allText: val });
   };
 
   hotkeys = (event) => {
@@ -233,9 +244,12 @@ class App extends Component {
         this.clipboard();
         break;
 
-      case 'BracketLeft':
-      case 'BracketRight':
-        this.switchMode();
+      case 'KeyK':
+        this.switchMode(true);
+        break;
+
+      case 'KeyL':
+        this.switchMode(false);
         break;
 
       default:
