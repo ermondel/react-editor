@@ -1,39 +1,29 @@
 import React from 'react';
+import EditorMessage from './EditorMessage';
 import { lengthWithoutSpaces } from '../editor';
 
-const CounterTotalNumber = (props) => (
-  <span className='editor__counter' title='Total number of characters'>
-    {props.text.length}
-  </span>
-);
-
-const CounterWithoutSpaces = (props) => (
-  <span className='editor__counter' title='Number of characters without any spaces'>
-    {lengthWithoutSpaces(props.text)}
-  </span>
-);
-
-const CounterSelectedCharacters = (props) => (
-  <span className='editor__counter' title='Number of selected characters'>
-    {props.x1 !== props.x2 ? props.x2 - props.x1 : 0}
-  </span>
-);
-
-const SatusBarMessage = (props) => {
-  return props.message ? (
-    <span className='editor__message' title={props.message}>
-      {props.message}
-    </span>
-  ) : null;
-};
-
 const StatusBar = (props) => {
+  const titles = {
+    ctn: 'Total number of characters',
+    cws: 'Number of characters without any spaces',
+    csc: 'Number of selected characters',
+  };
+
   return (
     <div className='status-bar'>
-      <CounterTotalNumber text={props.text} />
-      <CounterWithoutSpaces text={props.text} />
-      <CounterSelectedCharacters x1={props.selectionStart} x2={props.selectionEnd} />
-      <SatusBarMessage message={props.message} />
+      <span className='editor__counter' title={titles.ctn}>
+        {props.text.length}
+      </span>
+
+      <span className='editor__counter' title={titles.cws}>
+        {lengthWithoutSpaces(props.text)}
+      </span>
+
+      <span className='editor__counter' title={titles.csc} ref={props.editorCSCRef}>
+        0
+      </span>
+
+      <EditorMessage message={props.message} />
     </div>
   );
 };

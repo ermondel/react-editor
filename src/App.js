@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CommandBar from './components/CommandBar';
-import Editor from './components/Editor';
+import StatusBar from './components/StatusBar';
+import EditorWindow from './components/EditorWindow';
 import Preview from './components/Preview';
 import { addTag, changeCase, splitText, filename } from './editor';
 
@@ -11,24 +12,23 @@ class App extends Component {
     message: '',
   };
 
-  editorRef = React.createRef();
   editorHistory = [];
-  editorSelectionStart = 0;
-  editorSelectionEnd = 0;
+  editorRef = React.createRef();
+  editorCSCRef = React.createRef();
 
   getText() {
     if (this.state.allText) {
       return this.state.text;
     }
 
-    if (this.editorSelectionStart === this.editorSelectionEnd) {
+    const start = this.editorRef.current.selectionStart;
+    const end = this.editorRef.current.selectionEnd;
+
+    if (start === end) {
       return '';
     }
 
-    return this.editorRef.current.value.substring(
-      this.editorSelectionStart,
-      this.editorSelectionEnd
-    );
+    return this.editorRef.current.value.substring(start, end);
   }
 
   setText(text, positionOffset) {
@@ -38,8 +38,8 @@ class App extends Component {
       return;
     }
 
-    const start = this.editorSelectionStart;
-    const end = this.editorSelectionEnd;
+    const start = this.editorRef.current.selectionStart;
+    const end = this.editorRef.current.selectionEnd;
 
     this.editorRef.current.setRangeText(text, start, end, 'end');
 
@@ -47,9 +47,6 @@ class App extends Component {
       this.editorRef.current.selectionStart = start + positionOffset;
       this.editorRef.current.selectionEnd = start + positionOffset;
     }
-
-    this.editorSelectionStart = 0;
-    this.editorSelectionEnd = 0;
 
     this.setState({ text: this.editorRef.current.value });
   }
@@ -140,6 +137,9 @@ class App extends Component {
       return this.editorRef.current.focus();
     }
 
+    this.editorRef.current.selectionStart = this.state.text.length;
+    this.editorRef.current.selectionEnd = this.state.text.length;
+
     navigator.clipboard
       .writeText(this.state.text)
       .then(() => {
@@ -151,18 +151,19 @@ class App extends Component {
       })
       .then(() => {
         this.setState({ message: '' });
+      })
+      .catch(() => {
+        this.setState({ message: 'Browser buffer error. Repeat the action!' });
+
+        return new Promise((resolve) => {
+          setTimeout(() => resolve(), 2000);
+        });
+      })
+      .then(() => {
+        this.setState({ message: '' });
       });
 
-    this.editorRef.current.focus();
-  };
-
-  onEditorChange = (event) => {
-    this.setState({ text: event.target.value });
-  };
-
-  onTextSelect = (event) => {
-    this.editorSelectionStart = event.target.selectionStart;
-    this.editorSelectionEnd = event.target.selectionEnd;
+    this.editorRef.current.blur();
   };
 
   switchMode = (val) => {
@@ -180,7 +181,19 @@ class App extends Component {
     this.setState({ allText: val });
   };
 
-  hotkeys = (event) => {
+  onEditorChange = (event) => {
+    this.setState({ text: event.target.value });
+  };
+
+  onEditorTextSelect = (event) => {
+    const start = event.target.selectionStart;
+    const end = event.target.selectionEnd;
+
+    const csc = start !== end ? end - start : 0;
+    this.editorCSCRef.current.textContent = csc;
+  };
+
+  onEditorKeyDown = (event) => {
     if (!event.altKey) {
       return;
     }
@@ -251,25 +264,30 @@ class App extends Component {
     return (
       <main className='main'>
         <CommandBar
-          action={this.action}
-          showRollback={this.editorHistory.length > 0}
-          discard={this.discard}
-          undo={this.undo}
           allText={this.state.allText}
-          switchMode={this.switchMode}
+          showRollback={this.editorHistory.length > 0}
+          undo={this.undo}
+          action={this.action}
+          discard={this.discard}
           clipboard={this.clipboard}
+          switchMode={this.switchMode}
         />
 
-        <Editor
-          text={this.state.text}
-          onChange={this.onEditorChange}
-          onSelect={this.onTextSelect}
-          editorRef={this.editorRef}
-          selectionStart={this.editorSelectionStart}
-          selectionEnd={this.editorSelectionEnd}
-          message={this.state.message}
-          onKeyDown={this.hotkeys}
-        />
+        <div className='editor'>
+          <StatusBar
+            text={this.state.text}
+            message={this.state.message}
+            editorCSCRef={this.editorCSCRef}
+          />
+
+          <EditorWindow
+            editorRef={this.editorRef}
+            text={this.state.text}
+            onEditorChange={this.onEditorChange}
+            onEditorKeyDown={this.onEditorKeyDown}
+            onEditorTextSelect={this.onEditorTextSelect}
+          />
+        </div>
 
         <Preview text={this.state.text} />
       </main>
