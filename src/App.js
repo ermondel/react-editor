@@ -118,7 +118,7 @@ class App extends Component {
   discard = () => {
     const text = this.editorHistory[0];
 
-    if (text) {
+    if (text !== undefined) {
       this.editorHistory = [];
       this.setState({ text });
     }
@@ -129,7 +129,7 @@ class App extends Component {
   undo = () => {
     const previousText = this.editorHistory.pop();
 
-    if (previousText) {
+    if (previousText !== undefined) {
       this.setState({ text: previousText });
     }
 
