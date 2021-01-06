@@ -7,27 +7,27 @@ import { addTag, changeCase, splitText, filename } from './editor';
 class App extends Component {
   state = {
     text: '',
-    selectionStart: 0,
-    selectionEnd: 0,
     allText: false,
     message: '',
   };
 
   editorRef = React.createRef();
   editorHistory = [];
+  editorSelectionStart = 0;
+  editorSelectionEnd = 0;
 
   getText() {
     if (this.state.allText) {
       return this.state.text;
     }
 
-    if (this.state.selectionStart === this.state.selectionEnd) {
+    if (this.editorSelectionStart === this.editorSelectionEnd) {
       return '';
     }
 
     return this.editorRef.current.value.substring(
-      this.state.selectionStart,
-      this.state.selectionEnd
+      this.editorSelectionStart,
+      this.editorSelectionEnd
     );
   }
 
@@ -38,8 +38,8 @@ class App extends Component {
       return;
     }
 
-    const start = this.state.selectionStart;
-    const end = this.state.selectionEnd;
+    const start = this.editorSelectionStart;
+    const end = this.editorSelectionEnd;
 
     this.editorRef.current.setRangeText(text, start, end, 'end');
 
@@ -48,11 +48,10 @@ class App extends Component {
       this.editorRef.current.selectionEnd = start + positionOffset;
     }
 
-    this.setState({
-      text: this.editorRef.current.value,
-      selectionStart: 0,
-      selectionEnd: 0,
-    });
+    this.editorSelectionStart = 0;
+    this.editorSelectionEnd = 0;
+
+    this.setState({ text: this.editorRef.current.value });
   }
 
   action = (key) => {
@@ -169,10 +168,8 @@ class App extends Component {
   };
 
   onTextSelect = (event) => {
-    this.setState({
-      selectionStart: event.target.selectionStart,
-      selectionEnd: event.target.selectionEnd,
-    });
+    this.editorSelectionStart = event.target.selectionStart;
+    this.editorSelectionEnd = event.target.selectionEnd;
   };
 
   switchMode = (val) => {
@@ -275,8 +272,8 @@ class App extends Component {
           onChange={this.onEditorChange}
           onSelect={this.onTextSelect}
           editorRef={this.editorRef}
-          selectionStart={this.state.selectionStart}
-          selectionEnd={this.state.selectionEnd}
+          selectionStart={this.editorSelectionStart}
+          selectionEnd={this.editorSelectionEnd}
           message={this.state.message}
           onKeyDown={this.hotkeys}
         />
