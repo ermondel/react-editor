@@ -16,21 +16,34 @@ export function bbcodeToHTML(text) {
   let code = false;
   let tag = '';
   let res = '';
+  let char = '';
 
   for (let i = 0; i < text.length; i++) {
-    if (text[i] === '[') {
+    char = text[i];
+
+    if (char === '[') {
       code = true;
     }
 
     if (code) {
-      tag += text[i].toUpperCase();
-    } else if (text[i] === '\n') {
-      res += '<br />';
+      tag += char.toUpperCase();
     } else {
-      res += text[i];
+      switch (char) {
+        case '\n':
+          res += '<br />';
+          break;
+
+        case ' ':
+          res += '&nbsp';
+          break;
+
+        default:
+          res += char;
+          break;
+      }
     }
 
-    if (text[i] === ']') {
+    if (char === ']') {
       code = false;
 
       if (markup[tag]) {
