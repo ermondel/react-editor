@@ -136,19 +136,12 @@ class App extends Component {
   };
 
   clipboard = () => {
-    if (!navigator.clipboard) {
-      return;
-    }
-
-    const text = this.getText();
-
-    if (!text) {
-      this.editorRef.current.focus();
-      return;
+    if (!navigator.clipboard || !this.state.text.length) {
+      return this.editorRef.current.focus();
     }
 
     navigator.clipboard
-      .writeText(text)
+      .writeText(this.state.text)
       .then(() => {
         this.setState({ message: '✓ Copied to clipboard' });
 
