@@ -58,8 +58,6 @@ class App extends Component {
 
       this.__setText(nextText, positionOffset);
     }
-
-    this.editorRef.current.focus();
   }
 
   __discard = () => {
@@ -69,8 +67,6 @@ class App extends Component {
       this.editorHistory = [];
       this.setState({ text });
     }
-
-    this.editorRef.current.focus();
   };
 
   __undo = () => {
@@ -79,13 +75,11 @@ class App extends Component {
     if (previousText !== undefined) {
       this.setState({ text: previousText });
     }
-
-    this.editorRef.current.focus();
   };
 
   __clipboard = () => {
     if (!navigator.clipboard || !this.state.text.length) {
-      return this.editorRef.current.focus();
+      return;
     }
 
     this.editorRef.current.selectionStart = this.state.text.length;
@@ -113,15 +107,9 @@ class App extends Component {
       .then(() => {
         this.setState({ message: '' });
       });
-
-    // important sequence - focus > blur
-    this.editorRef.current.focus();
-    this.editorRef.current.blur();
   };
 
   __switchMode = (val) => {
-    this.editorRef.current.focus();
-
     if (typeof val !== 'boolean') {
       this.setState({ allText: !this.state.allText });
       return;
@@ -134,7 +122,10 @@ class App extends Component {
     this.setState({ allText: val });
   };
 
-  action = (code, val) => {
+  action = (code, event) => {
+    event.currentTarget.blur();
+    this.editorRef.current.focus();
+
     switch (code) {
       case 50:
         return this.__undo();
@@ -146,7 +137,7 @@ class App extends Component {
         return this.__clipboard();
 
       case 80:
-        return this.__switchMode(val);
+        return this.__switchMode();
 
       default:
         break;
