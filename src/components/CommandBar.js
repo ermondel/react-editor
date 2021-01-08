@@ -54,27 +54,31 @@ const CommandBar = (props) => {
       </div>
 
       <div className='command-bar__panel'>
-        <BtnImg click={props.clipboard} title='Add to clipboard [Alt+Q]'>
+        <BtnImg click={() => props.action(70)} title='Add to clipboard [Alt+Q]'>
           <IconPaste />
         </BtnImg>
 
         <BtnImg
-          click={props.discard}
+          click={() => props.action(51)}
           title='Undo all [Alt+X]'
-          disabled={!props.showRollback}
+          disabled={props.historyLength <= 0}
         >
           <IconDiscard />
         </BtnImg>
 
         <BtnImg
-          click={props.undo}
+          click={() => props.action(50)}
           title='Undo [Alt+Z]'
-          disabled={!props.showRollback}
+          disabled={props.historyLength <= 0}
         >
           <IconUndo />
         </BtnImg>
 
-        <BtnCircle click={props.switchMode} title={modTitle} active={props.allText}>
+        <BtnCircle
+          click={() => props.action(80)}
+          title={modTitle}
+          active={props.allText}
+        >
           mode
         </BtnCircle>
       </div>

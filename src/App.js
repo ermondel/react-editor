@@ -16,7 +16,7 @@ class App extends Component {
   editorRef = React.createRef();
   editorCSCRef = React.createRef();
 
-  getText() {
+  __getText() {
     if (this.state.allText) {
       return this.state.text;
     }
@@ -31,7 +31,7 @@ class App extends Component {
     return this.editorRef.current.value.substring(start, end);
   }
 
-  setText(text, positionOffset) {
+  __setText(text, positionOffset) {
     if (this.state.allText) {
       this.setState({ text });
 
@@ -51,67 +51,17 @@ class App extends Component {
     this.setState({ text: this.editorRef.current.value });
   }
 
-  action = (key) => {
-    const prevText = this.getText();
-    let nextText;
-    let positionOffset;
-
-    switch (key) {
-      case 10:
-        nextText = addTag('B', prevText);
-        positionOffset = 3;
-        break;
-
-      case 11:
-        nextText = addTag('I', prevText);
-        positionOffset = 3;
-        break;
-
-      case 12:
-        nextText = addTag('S', prevText);
-        positionOffset = 3;
-        break;
-
-      case 13:
-        nextText = addTag('U', prevText);
-        positionOffset = 3;
-        break;
-
-      case 14:
-        nextText = addTag('SPOILER', prevText);
-        positionOffset = 9;
-        break;
-
-      case 20:
-        nextText = changeCase(1, prevText);
-        break;
-
-      case 21:
-        nextText = changeCase(0, prevText);
-        break;
-
-      case 30:
-        nextText = splitText('@', prevText);
-        break;
-
-      case 40:
-        nextText = filename(prevText);
-        break;
-
-      default:
-        console.log('[APP] command not found');
-        break;
-    }
-
-    if (prevText !== nextText) {
+  __processText(nextText, prevText, positionOffset) {
+    if (nextText !== prevText) {
       this.editorHistory.push(this.state.text);
-      this.setText(nextText, positionOffset);
+
+      this.__setText(nextText, positionOffset);
     }
 
     this.editorRef.current.focus();
-  };
+  }
 
-  discard = () => {
+  __discard = () => {
     const text = this.editorHistory[0];
 
     if (text !== undefined) {
@@ -122,7 +72,7 @@ class App extends Component {
     this.editorRef.current.focus();
   };
 
-  undo = () => {
+  __undo = () => {
     const previousText = this.editorHistory.pop();
 
     if (previousText !== undefined) {
@@ -132,7 +82,7 @@ class App extends Component {
     this.editorRef.current.focus();
   };
 
-  clipboard = () => {
+  __clipboard = () => {
     if (!navigator.clipboard || !this.state.text.length) {
       return this.editorRef.current.focus();
     }
@@ -163,10 +113,12 @@ class App extends Component {
         this.setState({ message: '' });
       });
 
+    // important sequence - focus > blur
+    this.editorRef.current.focus();
     this.editorRef.current.blur();
   };
 
-  switchMode = (val) => {
+  __switchMode = (val) => {
     this.editorRef.current.focus();
 
     if (typeof val !== 'boolean') {
@@ -179,6 +131,60 @@ class App extends Component {
     }
 
     this.setState({ allText: val });
+  };
+
+  action = (code, val) => {
+    switch (code) {
+      case 50:
+        return this.__undo();
+
+      case 51:
+        return this.__discard();
+
+      case 70:
+        return this.__clipboard();
+
+      case 80:
+        return this.__switchMode(val);
+
+      default:
+        break;
+    }
+
+    const text = this.__getText();
+
+    switch (code) {
+      case 10:
+        return this.__processText(addTag('B', text), text, 3);
+
+      case 11:
+        return this.__processText(addTag('I', text), text, 3);
+
+      case 12:
+        return this.__processText(addTag('S', text), text, 3);
+
+      case 13:
+        return this.__processText(addTag('U', text), text, 3);
+
+      case 14:
+        return this.__processText(addTag('SPOILER', text), text, 9);
+
+      case 20:
+        return this.__processText(changeCase(1, text), text);
+
+      case 21:
+        return this.__processText(changeCase(0, text), text);
+
+      case 30:
+        return this.__processText(splitText('@', text), text);
+
+      case 40:
+        return this.__processText(filename(text), text);
+
+      default:
+        console.log('[APP] command not found');
+        break;
+    }
   };
 
   onEditorChange = (event) => {
@@ -236,23 +242,23 @@ class App extends Component {
         break;
 
       case 'KeyZ':
-        this.undo();
+        this.action(50);
         break;
 
       case 'KeyX':
-        this.discard();
+        this.action(51);
         break;
 
       case 'KeyQ':
-        this.clipboard();
+        this.action(70);
         break;
 
       case 'KeyK':
-        this.switchMode(true);
+        this.action(80, true);
         break;
 
       case 'KeyL':
-        this.switchMode(false);
+        this.action(80, false);
         break;
 
       default:
@@ -264,13 +270,9 @@ class App extends Component {
     return (
       <main className='main'>
         <CommandBar
-          allText={this.state.allText}
-          showRollback={this.editorHistory.length > 0}
-          undo={this.undo}
           action={this.action}
-          discard={this.discard}
-          clipboard={this.clipboard}
-          switchMode={this.switchMode}
+          allText={this.state.allText}
+          historyLength={this.editorHistory.length}
         />
 
         <div className='editor'>
