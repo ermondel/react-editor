@@ -4,6 +4,7 @@ import StatusBar from './components/StatusBar';
 import EditorWindow from './components/EditorWindow';
 import Preview from './components/Preview';
 import { addTag, changeCase, splitText, filename } from './editor';
+import { hotkeys } from './config/keys';
 
 class App extends Component {
   state = {
@@ -200,69 +201,8 @@ class App extends Component {
   };
 
   onEditorKeyDown = (event) => {
-    if (!event.altKey) {
-      return;
-    }
-
-    switch (event.code) {
-      case 'KeyB':
-        this.action(10);
-        break;
-
-      case 'KeyI':
-        this.action(11);
-        break;
-
-      case 'KeyS':
-        this.action(12);
-        break;
-
-      case 'KeyU':
-        this.action(13);
-        break;
-
-      case 'KeyP':
-        this.action(14);
-        break;
-
-      case 'ArrowUp':
-        this.action(20);
-        break;
-
-      case 'ArrowDown':
-        this.action(21);
-        break;
-
-      case 'KeyJ':
-        this.action(30);
-        break;
-
-      case 'KeyN':
-        this.action(40);
-        break;
-
-      case 'KeyZ':
-        this.action(50);
-        break;
-
-      case 'KeyX':
-        this.action(51);
-        break;
-
-      case 'KeyQ':
-        this.action(70);
-        break;
-
-      case 'KeyK':
-        this.action(80, true);
-        break;
-
-      case 'KeyL':
-        this.action(80, false);
-        break;
-
-      default:
-        return;
+    if (event.altKey && hotkeys[event.code]) {
+      this.action(hotkeys[event.code]);
     }
   };
 
