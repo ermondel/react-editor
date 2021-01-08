@@ -123,7 +123,10 @@ class App extends Component {
   };
 
   action = (code, event) => {
-    event.currentTarget.blur();
+    if (event && event.currentTarget) {
+      event.currentTarget.blur();
+    }
+
     this.editorRef.current.focus();
 
     switch (code) {
@@ -195,8 +198,12 @@ class App extends Component {
   };
 
   onEditorKeyDown = (event) => {
-    if (event.altKey && hotkeys[event.code]) {
-      this.action(hotkeys[event.code]);
+    if (event.altKey && event.code !== 'AltLeft' && event.code !== 'AltRight') {
+      if (hotkeys[event.code]) {
+        this.action(hotkeys[event.code]);
+      } else {
+        console.log('[APP] hotkey not found');
+      }
     }
   };
 
