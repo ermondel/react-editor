@@ -96,3 +96,18 @@ export function changeCase(upper, text) {
 export function splitText(separator, text) {
   return text.replaceAll(/\n/g, `\n${separator}\n`);
 }
+
+//
+export function trimText(text) {
+  if (text.indexOf('\n') >= 0) {
+    let arr = text.split('\n');
+
+    arr.forEach((val, key) => {
+      arr[key] = val.trim();
+    });
+
+    return arr.join('\n');
+  }
+
+  return text.trim();
+}

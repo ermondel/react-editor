@@ -72,6 +72,13 @@ const CommandBar = (props) => (
       >
         &f
       </BtnSym>
+
+      <BtnSym
+        click={(e) => props.action(keys.key90.code, e)}
+        title={`${keys.key90.title.en} ${keys.key90.shortcut}`}
+      >
+        T_
+      </BtnSym>
     </div>
 
     <div className='command-bar__panel'>

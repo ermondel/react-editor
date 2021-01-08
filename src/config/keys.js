@@ -12,6 +12,7 @@ export const hotkeys = {
   KeyX: 51,
   KeyQ: 70,
   KeyK: 80,
+  KeyT: 90,
 };
 
 export const keys = {
@@ -81,5 +82,12 @@ export const keys = {
     },
     shortcut: '[Alt+K]',
     code: 80,
+  },
+  key90: {
+    title: {
+      en: `Remove spaces at the beginning\nand at the end of lines.\n`,
+    },
+    shortcut: '[Alt+T]',
+    code: 90,
   },
 };

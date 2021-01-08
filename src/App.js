@@ -3,7 +3,7 @@ import CommandBar from './components/CommandBar';
 import StatusBar from './components/StatusBar';
 import EditorWindow from './components/EditorWindow';
 import Preview from './components/Preview';
-import { addTag, changeCase, splitText, filename } from './editor';
+import { addTag, changeCase, splitText, filename, trimText } from './editor';
 import { hotkeys } from './config/keys';
 
 class App extends Component {
@@ -172,6 +172,9 @@ class App extends Component {
 
       case 40:
         return this.__processText(filename(text), text);
+
+      case 90:
+        return this.__processText(trimText(text), text);
 
       default:
         console.log('[APP] command not found');
