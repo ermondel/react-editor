@@ -207,6 +207,17 @@ class App extends Component {
     }
   };
 
+  onEditorPaste = (event) => {
+    event.preventDefault();
+    this.editorHistory.push(this.state.text);
+    const paste = (event.clipboardData || window.clipboardData).getData('text');
+    this.__setText(paste);
+  };
+
+  onEditorCut = () => {
+    this.editorHistory.push(this.state.text);
+  };
+
   render() {
     return (
       <main className='main'>
@@ -224,8 +235,10 @@ class App extends Component {
           />
 
           <EditorWindow
-            editorRef={this.editorRef}
             text={this.state.text}
+            editorRef={this.editorRef}
+            onEditorCut={this.onEditorCut}
+            onEditorPaste={this.onEditorPaste}
             onEditorChange={this.onEditorChange}
             onEditorKeyDown={this.onEditorKeyDown}
             onEditorTextSelect={this.onEditorTextSelect}
