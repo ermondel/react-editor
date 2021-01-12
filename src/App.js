@@ -5,6 +5,7 @@ import EditorWindow from './components/EditorWindow';
 import Preview from './components/Preview';
 import { addTag, changeCase, splitText, filename, trimText } from './editor';
 import { hotkeys } from './config/keys';
+import extendTextarea from './textarea';
 
 class App extends Component {
   state = {
@@ -13,51 +14,26 @@ class App extends Component {
     message: '',
   };
 
+  source = extendTextarea(React.createRef());
   editorHistory = [];
-  editorRef = React.createRef();
   editorCSCRef = React.createRef();
 
   __getText() {
-    if (this.state.allText) {
-      return this.state.text;
-    }
-
-    const start = this.editorRef.current.selectionStart;
-    const end = this.editorRef.current.selectionEnd;
-
-    if (start === end) {
-      return '';
-    }
-
-    return this.editorRef.current.value.substring(start, end);
+    return this.state.allText ? this.state.text : this.source.getText();
   }
 
-  __setText(text, positionOffset) {
-    if (this.state.allText) {
-      this.setState({ text });
-
+  __setText(nextText, prevText, positionOffset) {
+    if (nextText === prevText) {
       return;
     }
 
-    const start = this.editorRef.current.selectionStart;
-    const end = this.editorRef.current.selectionEnd;
+    this.editorHistory.push(this.state.text);
 
-    this.editorRef.current.setRangeText(text, start, end, 'end');
-
-    if (positionOffset && start === end) {
-      this.editorRef.current.selectionStart = start + positionOffset;
-      this.editorRef.current.selectionEnd = start + positionOffset;
+    if (!this.state.allText) {
+      nextText = this.source.setText(nextText, positionOffset);
     }
 
-    this.setState({ text: this.editorRef.current.value });
-  }
-
-  __processText(nextText, prevText, positionOffset) {
-    if (nextText !== prevText) {
-      this.editorHistory.push(this.state.text);
-
-      this.__setText(nextText, positionOffset);
-    }
+    this.setState({ text: nextText });
   }
 
   __discard = () => {
@@ -82,8 +58,7 @@ class App extends Component {
       return;
     }
 
-    this.editorRef.current.selectionStart = this.state.text.length;
-    this.editorRef.current.selectionEnd = this.state.text.length;
+    this.source.setCursor(this.state.text.length);
 
     navigator.clipboard
       .writeText(this.state.text)
@@ -127,7 +102,7 @@ class App extends Component {
       event.currentTarget.blur();
     }
 
-    this.editorRef.current.focus();
+    this.source.focus();
 
     switch (code) {
       case 50:
@@ -150,34 +125,34 @@ class App extends Component {
 
     switch (code) {
       case 10:
-        return this.__processText(addTag('B', text), text, 3);
+        return this.__setText(addTag('B', text), text, 3);
 
       case 11:
-        return this.__processText(addTag('I', text), text, 3);
+        return this.__setText(addTag('I', text), text, 3);
 
       case 12:
-        return this.__processText(addTag('S', text), text, 3);
+        return this.__setText(addTag('S', text), text, 3);
 
       case 13:
-        return this.__processText(addTag('U', text), text, 3);
+        return this.__setText(addTag('U', text), text, 3);
 
       case 14:
-        return this.__processText(addTag('SPOILER', text), text, 9);
+        return this.__setText(addTag('SPOILER', text), text, 9);
 
       case 20:
-        return this.__processText(changeCase(1, text), text);
+        return this.__setText(changeCase(1, text), text);
 
       case 21:
-        return this.__processText(changeCase(0, text), text);
+        return this.__setText(changeCase(0, text), text);
 
       case 30:
-        return this.__processText(splitText('@', text), text);
+        return this.__setText(splitText('@', text), text);
 
       case 40:
-        return this.__processText(filename(text), text);
+        return this.__setText(filename(text), text);
 
       case 90:
-        return this.__processText(trimText(text), text);
+        return this.__setText(trimText(text), text);
 
       default:
         console.log('[APP] command not found');
@@ -211,7 +186,7 @@ class App extends Component {
     event.preventDefault();
     this.editorHistory.push(this.state.text);
     const paste = (event.clipboardData || window.clipboardData).getData('text');
-    this.__setText(paste);
+    this.setState({ text: this.source.setText(paste) });
   };
 
   onEditorCut = () => {
@@ -236,7 +211,7 @@ class App extends Component {
 
           <EditorWindow
             text={this.state.text}
-            editorRef={this.editorRef}
+            editorRef={this.source.ref}
             onEditorCut={this.onEditorCut}
             onEditorPaste={this.onEditorPaste}
             onEditorChange={this.onEditorChange}
