@@ -172,16 +172,6 @@ class App extends Component {
     this.editorCSCRef.current.textContent = csc;
   };
 
-  onEditorKeyDown = (event) => {
-    if (event.altKey && event.code !== 'AltLeft' && event.code !== 'AltRight') {
-      if (hotkeys[event.code]) {
-        this.action(hotkeys[event.code]);
-      } else {
-        console.log('[APP] hotkey not found');
-      }
-    }
-  };
-
   onEditorPaste = (event) => {
     event.preventDefault();
     this.editorHistory.push(this.state.text);
@@ -192,6 +182,20 @@ class App extends Component {
   onEditorCut = () => {
     this.editorHistory.push(this.state.text);
   };
+
+  onDocumentKeyDown = (event) => {
+    if (event.altKey && event.code !== 'AltLeft' && event.code !== 'AltRight') {
+      if (hotkeys[event.code]) {
+        this.action(hotkeys[event.code]);
+      } else {
+        console.log('[APP] hotkey not found');
+      }
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onDocumentKeyDown);
+  }
 
   render() {
     return (
@@ -215,7 +219,6 @@ class App extends Component {
             onEditorCut={this.onEditorCut}
             onEditorPaste={this.onEditorPaste}
             onEditorChange={this.onEditorChange}
-            onEditorKeyDown={this.onEditorKeyDown}
             onEditorTextSelect={this.onEditorTextSelect}
           />
         </div>
