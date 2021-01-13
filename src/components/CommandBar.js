@@ -4,6 +4,7 @@ import BtnImg from './BtnImg';
 import IconPaste from './IconPaste';
 import IconDiscard from './IconDiscard';
 import IconUndo from './IconUndo';
+import IconSquare from './IconSquare';
 import BtnCircle from './BtnCircle';
 import { keys } from '../config/keys';
 
@@ -42,7 +43,7 @@ const CommandBar = (props) => (
         click={(e) => props.action(keys.key14.code, e)}
         title={`${keys.key14.title.en} ${keys.key14.shortcut}`}
       >
-        &#9632;
+        <IconSquare />
       </BtnSym>
 
       <BtnSym
