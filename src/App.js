@@ -12,6 +12,7 @@ class App extends Component {
     text: '',
     allText: false,
     message: '',
+    clean: true,
   };
 
   source = extendTextarea(React.createRef());
@@ -183,6 +184,12 @@ class App extends Component {
     this.editorHistory.push(this.state.text);
   };
 
+  onEditorKeyDown = (event) => {
+    if (event.code === 'Enter') {
+      this.editorHistory.push(this.state.text);
+    }
+  };
+
   onEditorKeyUp = (event) => {
     if (event.target.scrollHeight > event.target.clientHeight) {
       event.target.style.height = event.target.scrollHeight + 'px';
@@ -201,6 +208,13 @@ class App extends Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onDocumentKeyDown);
+  }
+
+  componentDidUpdate() {
+    if (this.state.text.length > 0 && !this.editorHistory.length) {
+      this.editorHistory.push('');
+      this.setState({ clean: false });
+    }
   }
 
   render() {
@@ -228,6 +242,7 @@ class App extends Component {
             onEditorKeyUp={this.onEditorKeyUp}
             onEditorChange={this.onEditorChange}
             onEditorTextSelect={this.onEditorTextSelect}
+            onEditorKeyDown={this.onEditorKeyDown}
           />
         </div>
 

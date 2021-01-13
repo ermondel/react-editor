@@ -10,6 +10,7 @@ const EditorWindow = (props) => (
     onPaste={props.onEditorPaste}
     onCut={props.onEditorCut}
     onKeyUp={props.onEditorKeyUp}
+    onKeyDown={props.onEditorKeyDown}
   ></textarea>
 );
 
