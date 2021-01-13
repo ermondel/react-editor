@@ -52,12 +52,12 @@ export const keys = {
     code: 21,
   },
   key30: {
-    title: { en: '@ list' },
+    title: { en: 'Convert lines to @-list' },
     shortcut: '[Alt+J]',
     code: 30,
   },
   key40: {
-    title: { en: 'format as filename' },
+    title: { en: 'Format as filename' },
     shortcut: '[Alt+N]',
     code: 40,
   },

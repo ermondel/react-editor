@@ -60,10 +60,10 @@ const CommandBar = (props) => (
       </BtnSym>
 
       <BtnSym
-        click={(e) => props.action(keys.key30.code, e)}
-        title={`${keys.key30.title.en} ${keys.key30.shortcut}`}
+        click={(e) => props.action(keys.key90.code, e)}
+        title={`${keys.key90.title.en} ${keys.key90.shortcut}`}
       >
-        @
+        T_
       </BtnSym>
 
       <BtnSym
@@ -74,10 +74,11 @@ const CommandBar = (props) => (
       </BtnSym>
 
       <BtnSym
-        click={(e) => props.action(keys.key90.code, e)}
-        title={`${keys.key90.title.en} ${keys.key90.shortcut}`}
+        click={(e) => props.action(keys.key30.code, e)}
+        title={`${keys.key30.title.en} ${keys.key30.shortcut}`}
+        disabled={props.text.indexOf('\n') < 0}
       >
-        T_
+        @
       </BtnSym>
     </div>
 
@@ -85,6 +86,7 @@ const CommandBar = (props) => (
       <BtnImg
         click={(e) => props.action(keys.key70.code, e)}
         title={`${keys.key70.title.en} ${keys.key70.shortcut}`}
+        disabled={!props.text.length}
       >
         <IconPaste />
       </BtnImg>

@@ -202,6 +202,7 @@ class App extends Component {
       <main className='main'>
         <CommandBar
           action={this.action}
+          text={this.state.text}
           allText={this.state.allText}
           historyLength={this.editorHistory.length}
         />
