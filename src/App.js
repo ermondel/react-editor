@@ -183,6 +183,12 @@ class App extends Component {
     this.editorHistory.push(this.state.text);
   };
 
+  onEditorKeyUp = (event) => {
+    if (event.target.scrollHeight > event.target.clientHeight) {
+      event.target.style.height = event.target.scrollHeight + 'px';
+    }
+  };
+
   onDocumentKeyDown = (event) => {
     if (event.altKey && event.code !== 'AltLeft' && event.code !== 'AltRight') {
       if (hotkeys[event.code]) {
@@ -219,6 +225,7 @@ class App extends Component {
             editorRef={this.source.ref}
             onEditorCut={this.onEditorCut}
             onEditorPaste={this.onEditorPaste}
+            onEditorKeyUp={this.onEditorKeyUp}
             onEditorChange={this.onEditorChange}
             onEditorTextSelect={this.onEditorTextSelect}
           />
