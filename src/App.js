@@ -6,6 +6,7 @@ import Preview from './components/Preview';
 import { addTag, changeCase, splitText, filename, trimText } from './editor';
 import { hotkeys } from './config/keys';
 import extendTextarea from './textarea';
+import writeToClipboard from './clipboard';
 
 class App extends Component {
   state = {
@@ -55,34 +56,19 @@ class App extends Component {
   };
 
   __clipboard = () => {
-    if (!navigator.clipboard || !this.state.text.length) {
+    if (!this.state.text.length) {
       return;
     }
 
     this.source.setCursor(this.state.text.length);
 
-    navigator.clipboard
-      .writeText(this.state.text)
-      .then(() => {
-        this.setState({ message: '✓ Copied to clipboard' });
-
-        return new Promise((resolve) => {
-          setTimeout(() => resolve(), 2000);
-        });
-      })
-      .then(() => {
-        this.setState({ message: '' });
-      })
-      .catch(() => {
-        this.setState({ message: 'Browser buffer error. Repeat the action!' });
-
-        return new Promise((resolve) => {
-          setTimeout(() => resolve(), 2000);
-        });
-      })
-      .then(() => {
-        this.setState({ message: '' });
+    writeToClipboard(this.state.text, (success) => {
+      this.setState({
+        message: success ? '✓ Copied to clipboard' : '[Browser buffer error]',
       });
+
+      setTimeout(() => this.setState({ message: '' }), 2000);
+    });
   };
 
   __switchMode = (val) => {
