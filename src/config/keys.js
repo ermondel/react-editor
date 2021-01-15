@@ -1,18 +1,18 @@
 export const hotkeys = {
-  KeyB: 10,
-  KeyI: 11,
-  KeyS: 12,
-  KeyU: 13,
-  KeyP: 14,
-  ArrowUp: 20,
-  ArrowDown: 21,
-  KeyJ: 30,
-  KeyN: 40,
-  KeyZ: 50,
-  KeyX: 51,
-  KeyQ: 70,
-  KeyK: 80,
-  KeyT: 90,
+  KeyB: { code: 10, disabled: false },
+  KeyI: { code: 11, disabled: false },
+  KeyS: { code: 12, disabled: false },
+  KeyU: { code: 13, disabled: false },
+  KeyP: { code: 14, disabled: false },
+  ArrowUp: { code: 20, disabled: false },
+  ArrowDown: { code: 21, disabled: false },
+  KeyJ: { code: 30, disabled: false },
+  KeyN: { code: 40, disabled: false },
+  KeyZ: { code: 50, disabled: false },
+  KeyX: { code: 51, disabled: false },
+  KeyQ: { code: 70, disabled: navigator.userAgent.indexOf('Chrome') < 0 },
+  KeyK: { code: 80, disabled: false },
+  KeyT: { code: 90, disabled: false },
 };
 
 export const keys = {
@@ -73,7 +73,7 @@ export const keys = {
   },
   key70: {
     title: { en: 'Add to clipboard' },
-    shortcut: '[Alt+Q]',
+    shortcut: navigator.userAgent.indexOf('Chrome') >= 0 ? '[Alt+Q]' : '',
     code: 70,
   },
   key80: {

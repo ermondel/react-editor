@@ -183,12 +183,22 @@ class App extends Component {
   };
 
   onDocumentKeyDown = (event) => {
-    if (event.altKey && event.code !== 'AltLeft' && event.code !== 'AltRight') {
-      if (hotkeys[event.code]) {
-        this.action(hotkeys[event.code]);
-      } else {
-        console.log('[APP] hotkey not found');
-      }
+    const altKey = event.altKey;
+    const otherKey = event.code !== 'AltLeft' && event.code !== 'AltRight';
+
+    if (!altKey || !otherKey) {
+      return;
+    }
+
+    const hotkey = hotkeys[event.code];
+
+    if (!hotkey) {
+      console.log('[APP] hotkey not found');
+      return;
+    }
+
+    if (!hotkey.disabled) {
+      this.action(hotkey.code);
     }
   };
 
