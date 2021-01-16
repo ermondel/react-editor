@@ -1,6 +1,6 @@
 import React from 'react';
 import EditorMessage from './EditorMessage';
-import { lengthWithoutSpaces } from '../editor';
+import { lengthWithoutSpaces } from '../lib/format';
 
 const StatusBar = (props) => {
   const titles = {

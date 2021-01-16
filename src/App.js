@@ -3,10 +3,10 @@ import CommandBar from './components/CommandBar';
 import StatusBar from './components/StatusBar';
 import EditorWindow from './components/EditorWindow';
 import Preview from './components/Preview';
-import { addTag, changeCase, splitText, filename, trimText } from './editor';
+import { addTag, changeCase, splitText, filename, trimText } from './lib/format';
 import { hotkeys } from './config/keys';
-import extendTextarea from './textarea';
-import writeToClipboard from './clipboard';
+import extendTextarea from './lib/textarea';
+import writeToClipboard from './lib/clipboard';
 
 class App extends Component {
   state = {
