@@ -1,93 +1,93 @@
 export const hotkeys = {
-  KeyB: { code: 10, disabled: false },
-  KeyI: { code: 11, disabled: false },
-  KeyS: { code: 12, disabled: false },
-  KeyU: { code: 13, disabled: false },
-  KeyP: { code: 14, disabled: false },
-  ArrowUp: { code: 20, disabled: false },
-  ArrowDown: { code: 21, disabled: false },
-  KeyJ: { code: 30, disabled: false },
-  KeyN: { code: 40, disabled: false },
-  KeyZ: { code: 50, disabled: false },
-  KeyX: { code: 51, disabled: false },
-  KeyQ: { code: 70, disabled: navigator.userAgent.indexOf('Chrome') < 0 },
-  KeyK: { code: 80, disabled: false },
-  KeyT: { code: 90, disabled: false },
+  KeyB: { code: 101, disabled: false },
+  KeyI: { code: 102, disabled: false },
+  KeyS: { code: 103, disabled: false },
+  KeyU: { code: 104, disabled: false },
+  KeyP: { code: 105, disabled: false },
+  ArrowUp: { code: 201, disabled: false },
+  ArrowDown: { code: 202, disabled: false },
+  KeyJ: { code: 301, disabled: false },
+  KeyN: { code: 401, disabled: false },
+  KeyZ: { code: 901, disabled: false },
+  KeyX: { code: 902, disabled: false },
+  KeyQ: { code: 903, disabled: navigator.userAgent.indexOf('Chrome') < 0 },
+  KeyK: { code: 904, disabled: false },
+  KeyT: { code: 501, disabled: false },
 };
 
 export const keys = {
-  key10: {
+  key101: {
     title: { en: 'Bold' },
     shortcut: '[Alt+B]',
-    code: 10,
+    code: 101,
   },
-  key11: {
+  key102: {
     title: { en: 'Italic' },
     shortcut: '[Alt+I]',
-    code: 11,
+    code: 102,
   },
-  key12: {
+  key103: {
     title: { en: 'Strikethrough' },
     shortcut: '[Alt+S]',
-    code: 12,
+    code: 103,
   },
-  key13: {
+  key104: {
     title: { en: 'Underline' },
     shortcut: '[Alt+U]',
-    code: 13,
+    code: 104,
   },
-  key14: {
+  key105: {
     title: { en: 'Spoiler' },
     shortcut: '[Alt+P]',
-    code: 14,
+    code: 105,
   },
-  key20: {
+  key201: {
     title: { en: 'Uppercase' },
     shortcut: '[Alt+↑]',
-    code: 20,
+    code: 201,
   },
-  key21: {
+  key202: {
     title: { en: 'Lowercase' },
     shortcut: '[Alt+↓]',
-    code: 21,
+    code: 202,
   },
-  key30: {
+  key301: {
     title: { en: 'Convert lines to @-list' },
     shortcut: '[Alt+J]',
-    code: 30,
+    code: 301,
   },
-  key40: {
+  key401: {
     title: { en: 'Format as filename' },
     shortcut: '[Alt+N]',
-    code: 40,
+    code: 401,
   },
-  key50: {
+  key901: {
     title: { en: 'Undo' },
     shortcut: '[Alt+Z]',
-    code: 50,
+    code: 901,
   },
-  key51: {
+  key902: {
     title: { en: 'Undo all' },
     shortcut: '[Alt+X]',
-    code: 51,
+    code: 902,
   },
-  key70: {
+  key903: {
     title: { en: 'Add to clipboard' },
     shortcut: navigator.userAgent.indexOf('Chrome') >= 0 ? '[Alt+Q]' : '',
-    code: 70,
+    code: 903,
   },
-  key80: {
+  key904: {
     title: {
       en: `Mode switch.\n\nApplying formatting: all text or selected text.\n\n`,
     },
     shortcut: '[Alt+K]',
-    code: 80,
+    code: 904,
   },
-  key90: {
+  key501: {
     title: {
       en: `Remove spaces at the beginning\nand at the end of lines.\n`,
     },
     shortcut: '[Alt+T]',
-    code: 90,
+    code: 501,
   },
 };

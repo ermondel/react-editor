@@ -92,16 +92,16 @@ class App extends Component {
     this.source.focus();
 
     switch (code) {
-      case 50:
+      case 901:
         return this.__undo();
 
-      case 51:
+      case 902:
         return this.__discard();
 
-      case 70:
+      case 903:
         return this.__clipboard();
 
-      case 80:
+      case 904:
         return this.__switchMode();
 
       default:
@@ -111,34 +111,34 @@ class App extends Component {
     const text = this.__getText();
 
     switch (code) {
-      case 10:
+      case 101:
         return this.__setText(addTag('B', text), text, 3);
 
-      case 11:
+      case 102:
         return this.__setText(addTag('I', text), text, 3);
 
-      case 12:
+      case 103:
         return this.__setText(addTag('S', text), text, 3);
 
-      case 13:
+      case 104:
         return this.__setText(addTag('U', text), text, 3);
 
-      case 14:
+      case 105:
         return this.__setText(addTag('SPOILER', text), text, 9);
 
-      case 20:
+      case 201:
         return this.__setText(changeCase(1, text), text);
 
-      case 21:
+      case 202:
         return this.__setText(changeCase(0, text), text);
 
-      case 30:
+      case 301:
         return this.__setText(splitText('@', text), text);
 
-      case 40:
+      case 401:
         return this.__setText(filename(text), text);
 
-      case 90:
+      case 501:
         return this.__setText(trimText(text), text);
 
       default:
