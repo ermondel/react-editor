@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IconPaste = () => (
+const IconClipboard = () => (
   <svg
     xmlns='http://www.w3.org/2000/svg'
     height='48'
@@ -13,4 +13,4 @@ const IconPaste = () => (
   </svg>
 );
 
-export default IconPaste;
+export default IconClipboard;

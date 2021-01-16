@@ -67,7 +67,7 @@ export const keys = {
     code: 901,
   },
   key902: {
-    title: { en: 'Undo all' },
+    title: { en: 'Discard all changes and clear the form' },
     shortcut: '[Alt+X]',
     code: 902,
   },

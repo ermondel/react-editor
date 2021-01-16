@@ -87,17 +87,17 @@ export function addTag(tag, text) {
   return `[${tag}]${text}[/${tag}]`;
 }
 
-//
+// Change the case of text
 export function changeCase(upper, text) {
   return upper ? text.toUpperCase() : text.toLowerCase();
 }
 
-//
+// Add a separator to the list of lines in the text
 export function splitText(separator, text) {
   return text.replaceAll(/\n/g, `\n${separator}\n`);
 }
 
-//
+// Remove spaces at the beginning and at the end of lines in the text
 export function trimText(text) {
   if (text.indexOf('\n') >= 0) {
     let arr = text.split('\n');

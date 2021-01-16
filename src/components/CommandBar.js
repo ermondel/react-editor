@@ -1,10 +1,10 @@
 import React from 'react';
 import BtnSym from './BtnSym';
 import BtnImg from './BtnImg';
-import IconPaste from './IconPaste';
+import IconClipboard from './IconClipboard';
 import IconDiscard from './IconDiscard';
 import IconUndo from './IconUndo';
-import IconSquare from './IconSquare';
+import IconSpoiler from './IconSpoiler';
 import BtnCircle from './BtnCircle';
 import { keys } from '../config/keys';
 
@@ -43,7 +43,7 @@ const CommandBar = (props) => (
         click={(e) => props.action(keys.key105.code, e)}
         title={`${keys.key105.title.en} ${keys.key105.shortcut}`}
       >
-        <IconSquare />
+        <IconSpoiler />
       </BtnSym>
 
       <BtnSym
@@ -89,7 +89,7 @@ const CommandBar = (props) => (
         title={`${keys.key903.title.en} ${keys.key903.shortcut}`}
         disabled={!props.text.length}
       >
-        <IconPaste />
+        <IconClipboard />
       </BtnImg>
 
       <BtnImg
