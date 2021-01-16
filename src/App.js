@@ -38,24 +38,24 @@ class App extends Component {
     this.setState({ text: nextText });
   }
 
-  __discard = () => {
+  __discard() {
     const text = this.editorHistory[0];
 
     if (text !== undefined) {
       this.editorHistory = [];
       this.setState({ text });
     }
-  };
+  }
 
-  __undo = () => {
+  __undo() {
     const previousText = this.editorHistory.pop();
 
     if (previousText !== undefined) {
       this.setState({ text: previousText });
     }
-  };
+  }
 
-  __clipboard = () => {
+  __clipboard() {
     if (!this.state.text.length) {
       return;
     }
@@ -69,9 +69,9 @@ class App extends Component {
 
       setTimeout(() => this.setState({ message: '' }), 2000);
     });
-  };
+  }
 
-  __switchMode = (val) => {
+  __switchMode(val) {
     if (typeof val !== 'boolean') {
       this.setState({ allText: !this.state.allText });
       return;
@@ -82,8 +82,63 @@ class App extends Component {
     }
 
     this.setState({ allText: val });
-  };
+  }
 
+  __setEditorAsUsed() {
+    if (this.state.text.length > 0 && !this.editorHistory.length) {
+      this.editorHistory.push('');
+      this.setState({ clean: false });
+    }
+  }
+
+  __hotkey(event) {
+    const altKey = event.altKey;
+    const otherKey = event.code !== 'AltLeft' && event.code !== 'AltRight';
+
+    if (!altKey || !otherKey) {
+      return;
+    }
+
+    const hotkey = hotkeys[event.code];
+
+    if (!hotkey) {
+      console.log('[APP] hotkey not found');
+      return;
+    }
+
+    if (!hotkey.disabled) {
+      this.action(hotkey.code);
+    }
+  }
+
+  __autogrowing(event) {
+    if (event.target.scrollHeight > event.target.clientHeight) {
+      event.target.style.height = event.target.scrollHeight + 5 + 'px';
+    }
+  }
+
+  __toHistoryOnEnter(event) {
+    if (event.code === 'Enter') {
+      this.editorHistory.push(this.state.text);
+    }
+  }
+
+  __saveTextFromClipboard(event) {
+    event.preventDefault();
+    this.editorHistory.push(this.state.text);
+    const paste = (event.clipboardData || window.clipboardData).getData('text');
+    this.setState({ text: this.source.setText(paste) });
+  }
+
+  __setCounterOfSelectedCharacters(event) {
+    const start = event.target.selectionStart;
+    const end = event.target.selectionEnd;
+
+    const csc = start !== end ? end - start : 0;
+    this.editorCSCRef.current.textContent = csc;
+  }
+
+  // Commands
   action = (code, event) => {
     if (event && event.currentTarget) {
       event.currentTarget.blur();
@@ -147,72 +202,25 @@ class App extends Component {
     }
   };
 
-  onEditorChange = (event) => {
-    this.setState({ text: event.target.value });
-  };
+  // Events
+  onEditorChange = (event) => this.setState({ text: event.target.value });
+  onEditorTextSelect = (event) => this.__setCounterOfSelectedCharacters(event);
+  onEditorPaste = (event) => this.__saveTextFromClipboard(event);
+  onEditorCut = () => this.editorHistory.push(this.state.text);
+  onEditorKeyDown = (event) => this.__toHistoryOnEnter(event);
+  onEditorKeyUp = (event) => this.__autogrowing(event);
+  onDocumentKeyDown = (event) => this.__hotkey(event);
 
-  onEditorTextSelect = (event) => {
-    const start = event.target.selectionStart;
-    const end = event.target.selectionEnd;
-
-    const csc = start !== end ? end - start : 0;
-    this.editorCSCRef.current.textContent = csc;
-  };
-
-  onEditorPaste = (event) => {
-    event.preventDefault();
-    this.editorHistory.push(this.state.text);
-    const paste = (event.clipboardData || window.clipboardData).getData('text');
-    this.setState({ text: this.source.setText(paste) });
-  };
-
-  onEditorCut = () => {
-    this.editorHistory.push(this.state.text);
-  };
-
-  onEditorKeyDown = (event) => {
-    if (event.code === 'Enter') {
-      this.editorHistory.push(this.state.text);
-    }
-  };
-
-  onEditorKeyUp = (event) => {
-    if (event.target.scrollHeight > event.target.clientHeight) {
-      event.target.style.height = event.target.scrollHeight + 'px';
-    }
-  };
-
-  onDocumentKeyDown = (event) => {
-    const altKey = event.altKey;
-    const otherKey = event.code !== 'AltLeft' && event.code !== 'AltRight';
-
-    if (!altKey || !otherKey) {
-      return;
-    }
-
-    const hotkey = hotkeys[event.code];
-
-    if (!hotkey) {
-      console.log('[APP] hotkey not found');
-      return;
-    }
-
-    if (!hotkey.disabled) {
-      this.action(hotkey.code);
-    }
-  };
+  // Lifecycle
+  componentDidUpdate() {
+    this.__setEditorAsUsed();
+  }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onDocumentKeyDown);
   }
 
-  componentDidUpdate() {
-    if (this.state.text.length > 0 && !this.editorHistory.length) {
-      this.editorHistory.push('');
-      this.setState({ clean: false });
-    }
-  }
-
+  // Render
   render() {
     return (
       <main className='main'>
