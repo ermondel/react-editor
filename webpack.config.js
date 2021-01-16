@@ -9,6 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 /**
  * Env
@@ -16,6 +17,20 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
+
+/**
+ * Paths
+ */
+const favicon = path.resolve(__dirname, 'src/icons/favicon.ico');
+const appleIcon = path.resolve(__dirname, 'src/logo192.png');
+
+/**
+ * CopyPlugin patterns
+ */
+const appleIconPattern = {
+  from: path.resolve(__dirname, 'src/icons/logo192.png'),
+  to: path.resolve(__dirname, 'dist/logo192.png'),
+};
 
 /**
  * Rules
@@ -123,11 +138,15 @@ module.exports = {
       template: path.resolve(__dirname, 'src/index.ejs'),
       filename: 'index.html',
       minify: { collapseWhitespace: isProd },
-      favicon: path.resolve(__dirname, 'src/assets/images/favicon.ico'),
+      favicon: favicon,
+      'apple-touch-icon': appleIcon,
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: isDev ? '[name].css' : '[name].[hash].css',
+    }),
+    new CopyPlugin({
+      patterns: [appleIconPattern],
     }),
   ],
   module: {
