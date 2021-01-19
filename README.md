@@ -10,6 +10,8 @@ Simple online BBCode editor.
 
 [Demo](https://ermondel.github.io/react-editor)
 
+[![React Editor](https://github.com/ermondel/wiki/blob/master/screens/react-editor-app.jpg)](https://ermondel.github.io/react-editor)
+
 ### Technologies
 
 - React
