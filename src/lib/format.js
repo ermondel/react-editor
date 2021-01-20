@@ -76,15 +76,24 @@ export function filename(text) {
 export function addTag(tag, text) {
   if (text.indexOf('\n') >= 0) {
     let arr = text.split('\n');
+    let el;
 
     arr.forEach((val, key) => {
-      arr[key] = val.trim().length ? `[${tag}]${val}[/${tag}]` : val;
+      el = getPartsOfString(val);
+
+      if (!el.empty) {
+        arr[key] = `${el.space.start}[${tag}]${el.value}[/${tag}]${el.space.end}`;
+      } else {
+        arr[key] = el.value;
+      }
     });
 
     return arr.join('\n');
-  }
+  } else {
+    text = getPartsOfString(text);
 
-  return `[${tag}]${text}[/${tag}]`;
+    return `${text.space.start}[${tag}]${text.value}[/${tag}]${text.space.end}`;
+  }
 }
 
 // Change the case of text
@@ -110,4 +119,46 @@ export function trimText(text) {
   }
 
   return text.trim();
+}
+
+// Get separately the value of the string and the spaces in it at the beginning and at the end
+export function getPartsOfString(str) {
+  const res = {
+    value: '',
+    space: { start: '', end: '' },
+    empty: false,
+  };
+
+  if (!str) {
+    res.empty = true;
+    return res;
+  }
+
+  let i = 0;
+
+  while (str[i] === ' ') {
+    res.space.start += ' ';
+    i++;
+  }
+
+  if (i >= str.length) {
+    res.space.start = '';
+    res.empty = true;
+  }
+
+  let k = str.length - 1;
+
+  while (str[k] === ' ') {
+    res.space.end += ' ';
+    k--;
+  }
+
+  if (k < 0) {
+    res.space.end = '';
+    res.empty = true;
+  }
+
+  res.value = str.substring(i, k + 1);
+
+  return res;
 }
