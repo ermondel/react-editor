@@ -3,7 +3,13 @@ import CommandBar from './components/CommandBar';
 import StatusBar from './components/StatusBar';
 import EditorWindow from './components/EditorWindow';
 import Preview from './components/Preview';
-import { addTag, changeCase, splitText, filename, trimText } from './lib/format';
+import {
+  bbcodetag,
+  strcase,
+  srtssplit,
+  str2filename,
+  strstrim,
+} from './lib/fstring';
 import { hotkeys } from './config/keys';
 import extendTextarea from './lib/textarea';
 import writeToClipboard from './lib/clipboard';
@@ -167,34 +173,34 @@ class App extends Component {
 
     switch (code) {
       case 101:
-        return this.__setText(addTag('B', text), text, 3);
+        return this.__setText(bbcodetag('B', text), text, 3);
 
       case 102:
-        return this.__setText(addTag('I', text), text, 3);
+        return this.__setText(bbcodetag('I', text), text, 3);
 
       case 103:
-        return this.__setText(addTag('S', text), text, 3);
+        return this.__setText(bbcodetag('S', text), text, 3);
 
       case 104:
-        return this.__setText(addTag('U', text), text, 3);
+        return this.__setText(bbcodetag('U', text), text, 3);
 
       case 105:
-        return this.__setText(addTag('SPOILER', text), text, 9);
+        return this.__setText(bbcodetag('SPOILER', text), text, 9);
 
       case 201:
-        return this.__setText(changeCase(1, text), text);
+        return this.__setText(strcase(1, text), text);
 
       case 202:
-        return this.__setText(changeCase(0, text), text);
+        return this.__setText(strcase(0, text), text);
 
       case 301:
-        return this.__setText(splitText('@', text), text);
+        return this.__setText(srtssplit('@', text), text);
 
       case 401:
-        return this.__setText(filename(text), text);
+        return this.__setText(str2filename(text), text);
 
       case 501:
-        return this.__setText(trimText(text), text);
+        return this.__setText(strstrim(text), text);
 
       default:
         console.log('[APP] command not found');

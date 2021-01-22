@@ -1,11 +1,11 @@
 import React from 'react';
-import { bbcodeToHTML } from '../lib/format';
+import { bbcode2html } from '../lib/fstring';
 
 const Preview = ({ text }) => (
   <div
     className='preview'
     dangerouslySetInnerHTML={{
-      __html: bbcodeToHTML(text),
+      __html: bbcode2html(text),
     }}
   ></div>
 );

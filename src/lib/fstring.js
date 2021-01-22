@@ -1,5 +1,5 @@
 // Convert BBCode to HTML
-export function bbcodeToHTML(text) {
+export function bbcode2html(str) {
   const markup = {
     '[B]': '<span class="bbcode-bold">',
     '[/B]': '</span>',
@@ -18,8 +18,8 @@ export function bbcodeToHTML(text) {
   let res = '';
   let char = '';
 
-  for (let i = 0; i < text.length; i++) {
-    char = text[i];
+  for (let i = 0; i < str.length; i++) {
+    char = str[i];
 
     if (char === '[') {
       code = true;
@@ -57,29 +57,14 @@ export function bbcodeToHTML(text) {
   return res;
 }
 
-// Get the length of the text without spaces
-export function lengthWithoutSpaces(text) {
-  if (text) {
-    const spaces = text.match(/\s/g);
-    return spaces ? text.length - spaces.length : text.length;
-  }
-
-  return 0;
-}
-
-// Format the text as a filename
-export function filename(text) {
-  return text.replaceAll(/[^-_().,a-zA-Z0-9 ]/g, '').replaceAll(/ {2,}/g, ' ');
-}
-
-// Wrap text in a tag
-export function addTag(tag, text) {
-  if (text.indexOf('\n') >= 0) {
-    let arr = text.split('\n');
+// Wrap a string in the bbcode tag
+export function bbcodetag(tag, str) {
+  if (str.indexOf('\n') >= 0) {
+    let arr = str.split('\n');
     let el;
 
     arr.forEach((val, key) => {
-      el = getPartsOfString(val);
+      el = strinf(val);
 
       if (!el.empty) {
         arr[key] = `${el.space.start}[${tag}]${el.value}[/${tag}]${el.space.end}`;
@@ -90,26 +75,41 @@ export function addTag(tag, text) {
 
     return arr.join('\n');
   } else {
-    text = getPartsOfString(text);
+    str = strinf(str);
 
-    return `${text.space.start}[${tag}]${text.value}[/${tag}]${text.space.end}`;
+    return `${str.space.start}[${tag}]${str.value}[/${tag}]${str.space.end}`;
   }
 }
 
-// Change the case of text
-export function changeCase(upper, text) {
+// Get the length of the string without spaces
+export function strnetlen(str) {
+  if (str) {
+    const spaces = str.match(/\s/g);
+    return spaces ? str.length - spaces.length : str.length;
+  }
+
+  return 0;
+}
+
+// Format the string as filename
+export function str2filename(str) {
+  return str.replaceAll(/[^-_().,a-zA-Z0-9 ]/g, '').replaceAll(/ {2,}/g, ' ');
+}
+
+// Change the case of the string
+export function strcase(upper, text) {
   return upper ? text.toUpperCase() : text.toLowerCase();
 }
 
-// Add a separator to the list of lines in the text
-export function splitText(separator, text) {
-  return text.replaceAll(/\n/g, `\n${separator}\n`);
+// Split lines in the string with the separator
+export function srtssplit(separator, str) {
+  return str.replaceAll(/\n/g, `\n${separator}\n`);
 }
 
-// Remove spaces at the beginning and at the end of lines in the text
-export function trimText(text) {
-  if (text.indexOf('\n') >= 0) {
-    let arr = text.split('\n');
+// Strip whitespace from the beginning and end of the strings
+export function strstrim(str) {
+  if (str.indexOf('\n') >= 0) {
+    let arr = str.split('\n');
 
     arr.forEach((val, key) => {
       arr[key] = val.trim();
@@ -118,14 +118,24 @@ export function trimText(text) {
     return arr.join('\n');
   }
 
-  return text.trim();
+  return str.trim();
 }
 
-// Get separately the value of the string and the spaces in it at the beginning and at the end
-export function getPartsOfString(str) {
+/**
+ * Get info about the string
+ * :obj
+ *  value - value without leading and trailing spaces
+ *  space.start - all leading spaces
+ *  space.end - all trailing spaces
+ *  empty - is the string empty (a string consisting of spaces is considered empty)
+ */
+export function strinf(str) {
   const res = {
     value: '',
-    space: { start: '', end: '' },
+    space: {
+      start: '',
+      end: '',
+    },
     empty: false,
   };
 

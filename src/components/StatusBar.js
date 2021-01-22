@@ -1,6 +1,6 @@
 import React from 'react';
 import EditorMessage from './EditorMessage';
-import { lengthWithoutSpaces } from '../lib/format';
+import { strnetlen } from '../lib/fstring';
 
 const StatusBar = (props) => {
   const titles = {
@@ -16,7 +16,7 @@ const StatusBar = (props) => {
       </span>
 
       <span className='editor__counter' title={titles.cws}>
-        {lengthWithoutSpaces(props.text)}
+        {strnetlen(props.text)}
       </span>
 
       <span className='editor__counter' title={titles.csc} ref={props.editorCSCRef}>
