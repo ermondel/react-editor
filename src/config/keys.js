@@ -3,14 +3,14 @@ export const hotkeys = {
   KeyI: { code: 102, disabled: false },
   KeyS: { code: 103, disabled: false },
   KeyU: { code: 104, disabled: false },
-  KeyP: { code: 105, disabled: false },
+  KeyR: { code: 105, disabled: false },
   ArrowUp: { code: 201, disabled: false },
   ArrowDown: { code: 202, disabled: false },
   KeyJ: { code: 301, disabled: false },
   KeyN: { code: 401, disabled: false },
   KeyZ: { code: 901, disabled: false },
   KeyX: { code: 902, disabled: false },
-  KeyQ: { code: 903, disabled: navigator.userAgent.indexOf('Chrome') < 0 },
+  KeyL: { code: 903, disabled: navigator.userAgent.indexOf('Chrome') < 0 },
   KeyK: { code: 904, disabled: false },
   KeyT: { code: 501, disabled: false },
 };
@@ -38,7 +38,7 @@ export const keys = {
   },
   key105: {
     title: { en: 'Spoiler' },
-    shortcut: '[Alt+P]',
+    shortcut: '[Alt+R]',
     code: 105,
   },
   key201: {
@@ -73,7 +73,7 @@ export const keys = {
   },
   key903: {
     title: { en: 'Add to clipboard' },
-    shortcut: navigator.userAgent.indexOf('Chrome') >= 0 ? '[Alt+Q]' : '',
+    shortcut: navigator.userAgent.indexOf('Chrome') >= 0 ? '[Alt+L]' : '',
     code: 903,
   },
   key904: {
