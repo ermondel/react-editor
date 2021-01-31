@@ -10,7 +10,7 @@ const StatusBar = (props) => {
   };
 
   return (
-    <div className='status-bar'>
+    <div className='editor__status-bar'>
       <span className='editor__counter' title={titles.ctn}>
         {props.text.length}
       </span>

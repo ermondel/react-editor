@@ -1,0 +1,85 @@
+.command-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 15px;
+}
+
+.command-bar__panel {
+  display: flex;
+  align-items: center;
+}
+
+.command-bar__btn {
+  width: 50px;
+  margin: 0 5px 0 0;
+  padding: 8px 0 8px 0;
+
+  border: none;
+  border-radius: 3px;
+
+  color: black;
+  background: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    background-color: lightgrey;
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    color: #666666;
+    cursor: default;
+
+    &:hover,
+    &:focus {
+      outline: none;
+      background: none;
+    }
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.command-bar__btn--active {
+  & .command-bar__circle {
+    background-color: orange;
+  }
+
+  & .command-bar__circle-inner {
+    background-color: white;
+  }
+}
+
+.command-bar__circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+  background-color: black;
+}
+
+.command-bar__circle-inner {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.command-bar__btn__icon {
+  height: 18px;
+  display: block;
+}
