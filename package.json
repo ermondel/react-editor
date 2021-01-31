@@ -1,8 +1,8 @@
 {
   "name": "react-editor",
-  "version": "0.52.15",
+  "version": "0.53.15",
   "private": true,
-  "homepage": "https://github.com/ermondel/react-editor#readme",
+  "homepage": "https://ermondel.github.io/react-editor",
   "description": "Simple online BBCode editor",
   "author": "ermondel",
   "license": "CC BY-NC 4.0",

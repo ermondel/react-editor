@@ -1,6 +1,13 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
+  color: black;
+  background-color: white;
 }
 
 .main {
@@ -155,4 +162,24 @@ body {
 
 .hidden {
   display: none;
+}
+
+.footer {
+  position: absolute;
+  right: 7px;
+  bottom: 5px;
+
+  text-align: center;
+
+  color: #aaaaaa;
+  font-size: 12px;
+}
+
+.footer__link {
+  text-decoration: none;
+  color: #aaaaaa;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
